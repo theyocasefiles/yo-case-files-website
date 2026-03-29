@@ -16,7 +16,7 @@ export default function HomePage() {
         <div className="mx-auto flex max-w-7xl items-center justify-center px-4 py-4 md:px-6 lg:px-8">
           <a
             href="#home"
-            className="text-[1.9rem] font-semibold uppercase tracking-[0.32em] text-[#f5efe4] transition hover:text-[#c6a96b] drop-shadow-[0_0_12px_rgba(198,169,107,0.28)]"
+            className="max-w-full text-center text-[1.55rem] font-semibold uppercase tracking-[0.24em] text-[#f5efe4] transition hover:text-[#c6a96b] drop-shadow-[0_0_12px_rgba(198,169,107,0.28)] sm:text-[1.75rem] sm:tracking-[0.28em] md:text-[1.9rem] md:tracking-[0.32em]"
           >
             The Yo Case Files
           </a>

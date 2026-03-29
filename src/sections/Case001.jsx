@@ -4,17 +4,22 @@ import PortalButton from "../components/PortalButton";
 export default function Case001() {
   return (
     <section id="case-001" className="relative overflow-hidden">
+      {/* Background image — FIXED FOR MOBILE */}
       <div
-        className="absolute inset-0 bg-cover bg-[center_45%] opacity-72"
+        className="absolute inset-0 bg-cover bg-[center_65%] md:bg-[center_45%] opacity-80"
         style={{ backgroundImage: "url('/images/case001.png')" }}
       />
 
-      <div className="absolute inset-0 bg-[linear-gradient(to_bottom,rgba(11,11,13,0.10),rgba(11,11,13,0.36),rgba(11,11,13,0.82))]" />
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_left,rgba(11,11,13,0.55),transparent_42%)]" />
+      {/* Softer overlays (so image is more visible) */}
+      <div className="absolute inset-0 bg-[linear-gradient(to_bottom,rgba(11,11,13,0.08),rgba(11,11,13,0.28),rgba(11,11,13,0.72))]" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_left,rgba(11,11,13,0.45),transparent_42%)]" />
 
       <div className="relative mx-auto max-w-7xl px-4 py-10 md:px-6 lg:px-8 lg:py-14">
         <div className="max-w-md lg:ml-6 lg:mr-auto">
-          <div className="rounded-[2rem] border border-[#3a3227]/60 bg-[#0f1014]/25 p-5 shadow-[0_40px_100px_rgba(0,0,0,0.75)] backdrop-blur-md md:p-7">
+          
+          {/* Card — slightly more transparent */}
+          <div className="rounded-[2rem] border border-[#3a3227]/60 bg-[#0f1014]/18 p-5 shadow-[0_40px_100px_rgba(0,0,0,0.6)] backdrop-blur-md md:p-7">
+            
             <p className="text-xs font-semibold uppercase tracking-[0.38em] text-[#c6a96b]">
               Featured Investigation
             </p>
