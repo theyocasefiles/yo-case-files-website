@@ -18,8 +18,8 @@ const exploreLinks = [
 const infoLinks = [
   { label: "FAQ", href: "#faq" },
   { label: "Contact", href: "#footer" },
-  { label: "Privacy Policy", href: "#" },
-  { label: "Terms", href: "#" },
+  { label: "Privacy Policy", href: "/privacy" },
+  { label: "Terms & Conditions", href: "/terms" },
 ];
 
 function SocialIconLink({ icon: Icon, href }) {
