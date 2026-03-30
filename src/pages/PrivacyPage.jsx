@@ -1,91 +1,76 @@
-# Privacy Policy
+export default function PrivacyPage() {
+  return (
+    <div className="min-h-screen px-4 py-16 text-white">
+      <div className="mx-auto max-w-3xl space-y-6">
+        <h1 className="text-3xl font-semibold text-[#f5efe4]">
+          Privacy Policy
+        </h1>
 
-**Last updated:** [Insert Date]
+        <p className="text-sm text-gray-400">Last updated: 2026</p>
 
-Welcome to **The Yo Case Files** ("we", "our", "us").
+        <p className="text-gray-300">
+          Welcome to The Yo Case Files ("we", "our", "us"). We respect your
+          privacy and are committed to protecting your personal data.
+        </p>
 
-We respect your privacy and are committed to protecting your personal data. This Privacy Policy explains how we collect, use, and protect your information when you visit our website.
+        <h2 className="mt-6 text-xl font-semibold text-[#f5efe4]">
+          1. Information We Collect
+        </h2>
+        <ul className="list-disc space-y-1 pl-5 text-gray-300">
+          <li>Name (if provided)</li>
+          <li>Email address</li>
+          <li>Usage data such as pages visited and device information</li>
+        </ul>
 
----
+        <h2 className="mt-6 text-xl font-semibold text-[#f5efe4]">
+          2. How We Use Your Information
+        </h2>
+        <ul className="list-disc space-y-1 pl-5 text-gray-300">
+          <li>Provide and improve our services</li>
+          <li>Manage waitlist updates and communications</li>
+          <li>Respond to enquiries</li>
+        </ul>
 
-## 1. Information We Collect
+        <p className="text-gray-300">
+          We do <strong>not</strong> sell your personal data.
+        </p>
 
-We may collect the following information:
+        <h2 className="mt-6 text-xl font-semibold text-[#f5efe4]">
+          3. Cookies
+        </h2>
+        <p className="text-gray-300">
+          We may use cookies to improve your experience. You can disable them in
+          your browser settings.
+        </p>
 
-* **Personal Information**
+        <h2 className="mt-6 text-xl font-semibold text-[#f5efe4]">
+          4. Third-Party Services
+        </h2>
+        <p className="text-gray-300">
+          We may use trusted third-party services such as Formspree or Google
+          Analytics.
+        </p>
 
-  * Name (if provided)
-  * Email address (e.g. waitlist or contact form)
+        <h2 className="mt-6 text-xl font-semibold text-[#f5efe4]">
+          5. Data Security
+        </h2>
+        <p className="text-gray-300">
+          We take reasonable steps to protect your data, but no method is
+          completely secure.
+        </p>
 
-* **Usage Data**
+        <h2 className="mt-6 text-xl font-semibold text-[#f5efe4]">
+          6. Your Rights
+        </h2>
+        <p className="text-gray-300">
+          You may request access, correction, or deletion of your data.
+        </p>
 
-  * Pages visited
-  * Time spent on the site
-  * Device/browser information
-
----
-
-## 2. How We Use Your Information
-
-We use your information to:
-
-* Provide and improve our services
-* Manage the waitlist and communicate updates
-* Respond to enquiries
-* Improve website performance and user experience
-
-We do **not sell your personal data**.
-
----
-
-## 3. Cookies
-
-We may use cookies to:
-
-* Understand how visitors use our site
-* Improve performance and experience
-
-You can disable cookies in your browser settings.
-
----
-
-## 4. Third-Party Services
-
-We may use trusted third-party services such as:
-
-* Form handling tools (e.g. Formspree)
-* Analytics tools (e.g. Google Analytics)
-
-These services may process your data in accordance with their own privacy policies.
-
----
-
-## 5. Data Security
-
-We take reasonable steps to protect your data, but no system is 100% secure.
-
----
-
-## 6. Your Rights
-
-You have the right to:
-
-* Request access to your data
-* Request correction or deletion
-* Withdraw consent at any time
-
-To do so, contact us at:
-📧 **[hello@theyocasefiles.com](mailto:hello@theyocasefiles.com)**
-
----
-
-## 7. Changes to This Policy
-
-We may update this Privacy Policy. Any changes will be posted on this page.
-
----
-
-## 8. Contact
-
-If you have any questions, contact us at:
-📧 **[hello@theyocasefiles.com](mailto:hello@theyocasefiles.com)**
+        <h2 className="mt-6 text-xl font-semibold text-[#f5efe4]">
+          7. Contact
+        </h2>
+        <p className="text-gray-300">Email: hello@theyocasefiles.com</p>
+      </div>
+    </div>
+  );
+}
