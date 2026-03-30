@@ -1200,8 +1200,9 @@ input {
   }
 
   .login-header-logo {
-    left: 14px;
-    top: calc(50% - 21px);
+    width: 64px;
+    height: 64px;
+    top: calc(50% - 32px);
   }
 
   .header-left {
