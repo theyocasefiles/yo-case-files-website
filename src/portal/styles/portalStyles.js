@@ -1195,13 +1195,13 @@ input {
 
   .login-header {
     min-height: 82px;
-    padding-left: 72px;
+    padding-left: 100px;
     padding-right: 14px;
   }
 
   .login-header-logo {
-    width: 64px;
-    height: 64px;
+    width: 72px;
+    height: 72px;
     top: calc(50% - 32px);
   }
 
