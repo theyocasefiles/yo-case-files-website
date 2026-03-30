@@ -24,7 +24,7 @@ export default function PortalButton({ className = "" }) {
 
   if (hasAccess) {
     return (
-      <Link to="/briefing">
+      <Link to="/portal">
         <GoldButton className={className}>Enter Portal</GoldButton>
       </Link>
     );

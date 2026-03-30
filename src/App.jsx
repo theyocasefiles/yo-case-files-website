@@ -6,6 +6,10 @@ import BriefingPage from "./pages/BriefingPage";
 import PrivacyPage from "./pages/PrivacyPage";
 import TermsPage from "./pages/TermsPage";
 
+import PortalLogin from "./portal/pages/PortalLogin";
+import Case001Portal from "./portal/pages/Case001Portal";
+import ProtectedPortal from "./portal/components/ProtectedPortal";
+
 function ScrollToTop() {
   const { pathname } = useLocation();
 
@@ -28,7 +32,15 @@ export default function App() {
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/briefing" element={<BriefingPage />} />
-
+<Route path="/portal" element={<PortalLogin />} />
+<Route
+  path="/portal/case-001"
+  element={
+    <ProtectedPortal>
+      <Case001Portal />
+    </ProtectedPortal>
+  }
+/>
         {/* ✅ ADD THESE */}
         <Route path="/privacy" element={<PrivacyPage />} />
         <Route path="/terms" element={<TermsPage />} />
