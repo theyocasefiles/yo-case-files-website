@@ -12,7 +12,12 @@ export default function Detectives() {
           </h2>
 
           <p className="mt-4 text-white/70">
-            Built with real investigative thinking and cinematic storytelling.
+            We’re a couple who love a good murder mystery, puzzle solving, and the thrill
+             of a real investigation. After playing detective games ourselves, we decided
+              to create our own — combining cinematic storytelling with realistic case design.
+               With real police detective experience behind the scenes, The Yo Case Files
+                is built using genuine investigative thinking, official-style documents, 
+                and the kind of detail we always wanted to see in a case.
           </p>
         </div>
       </div>
