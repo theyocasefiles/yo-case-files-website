@@ -1,11 +1,23 @@
 import { useMemo } from "react";
-import { Globe, Mail, MessageCircle } from "lucide-react";
+import { Instagram, Mail } from "lucide-react";
 import WaitlistForm from "../components/WaitlistForm";
 
 const socialLinks = [
-  { icon: Globe, href: "#" },
-  { icon: MessageCircle, href: "#" },
-  { icon: Mail, href: "mailto:hello@theyocasefiles.com" },
+  {
+    label: "Instagram",
+    href: "https://www.instagram.com/theyocasefiles?igsh=ZHBnNmNmeGNkbHpk",
+    icon: "instagram",
+  },
+  {
+    label: "TikTok",
+    href: "https://www.tiktok.com/@theyocasefiles?_r=1&_t=ZN-95AjAIkTbNu",
+    icon: "tiktok",
+  },
+  {
+    label: "Email",
+    href: "mailto:detective.good@TheYoCaseFiles.com",
+    icon: "mail",
+  },
 ];
 
 const exploreLinks = [
@@ -13,6 +25,7 @@ const exploreLinks = [
   { label: "Case 001", href: "#case-001" },
   { label: "How It Works", href: "#how-it-works" },
   { label: "About", href: "#detectives" },
+  { label: "Enter Portal", href: "/portal" },
 ];
 
 const infoLinks = [
@@ -22,13 +35,38 @@ const infoLinks = [
   { label: "Terms & Conditions", href: "/terms" },
 ];
 
-function SocialIconLink({ icon: Icon, href }) {
+function TikTokIcon({ size = 18 }) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="currentColor"
+      aria-hidden="true"
+    >
+      <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.68h-3.13v12.36a2.9 2.9 0 1 1-2-2.77V8.43a6.03 6.03 0 1 0 5.13 5.97V8.14a7.9 7.9 0 0 0 4.77 1.6V6.69Z" />
+    </svg>
+  );
+}
+
+function SocialIcon({ icon, size = 18 }) {
+  if (icon === "instagram") return <Instagram size={size} />;
+  if (icon === "mail") return <Mail size={size} />;
+  if (icon === "tiktok") return <TikTokIcon size={size} />;
+  return null;
+}
+
+function SocialIconLink({ icon, href, label }) {
   return (
     <a
       href={href}
+      target={href.startsWith("http") ? "_blank" : undefined}
+      rel={href.startsWith("http") ? "noopener noreferrer" : undefined}
+      aria-label={label}
       className="flex h-11 w-11 items-center justify-center rounded-2xl border border-[#2b2e34] bg-[#13151a] text-[#f5efe4] transition duration-300 hover:-translate-y-0.5 hover:border-[#c6a96b] hover:text-[#c6a96b]"
     >
-      <Icon size={18} />
+      <SocialIcon icon={icon} />
     </a>
   );
 }
@@ -63,7 +101,7 @@ export default function Footer() {
       id="footer"
       className="border-t border-white/5 bg-[linear-gradient(180deg,#0a0b0e,#090a0d)]"
     >
-      <div className="mx-auto grid max-w-7xl gap-10 px-4 py-14 md:px-6 lg:grid-cols-[1.15fr_0.7fr_0.7fr_1fr] lg:px-8 lg:py-16">
+      <div className="mx-auto grid max-w-7xl gap-10 px-4 py-14 md:px-6 lg:grid-cols-[1.1fr_0.7fr_0.7fr_1fr] lg:px-8 lg:py-16">
         <div>
           <p className="text-xs font-semibold uppercase tracking-[0.35em] text-[#c6a96b]">
             The Yo Case Files
@@ -80,11 +118,12 @@ export default function Footer() {
           </p>
 
           <div className="mt-7 flex gap-3">
-            {socialLinks.map((link, index) => (
+            {socialLinks.map((link) => (
               <SocialIconLink
-                key={`${link.href}-${index}`}
+                key={link.label}
                 icon={link.icon}
                 href={link.href}
+                label={link.label}
               />
             ))}
           </div>
@@ -93,24 +132,39 @@ export default function Footer() {
         <FooterLinkColumn title="Explore" links={exploreLinks} />
         <FooterLinkColumn title="Information" links={infoLinks} />
 
-        <div
-          id="portal"
-          className="rounded-[2rem] border border-[#2b2e34] bg-[#111318]/85 p-6 backdrop-blur-sm"
-        >
+        <div className="rounded-[2rem] border border-[#2b2e34] bg-[#111318]/85 p-6 backdrop-blur-sm">
           <p className="text-sm font-semibold uppercase tracking-[0.25em] text-[#c6a96b]">
-            Join the Case List
+            Contact
           </p>
 
           <h4 className="mt-3 text-2xl font-semibold text-[#f5efe4]">
-            Stay close to the investigation
+            Get in touch
           </h4>
 
           <p className="mt-4 leading-7 text-[#a9adb7]">
-            Get launch updates, new case drops, early access news, and future
-            investigation briefings.
+            For general enquiries, support, collaborations, or press, contact
+            us below or follow the investigation on social media.
           </p>
 
-          <WaitlistForm />
+          <a
+            href="mailto:detective.good@TheYoCaseFiles.com"
+            className="mt-5 block break-all text-[#f5efe4] transition duration-300 hover:text-[#c6a96b]"
+          >
+            detective.good@TheYoCaseFiles.com
+          </a>
+
+          <div className="mt-6">
+            <p className="text-sm font-semibold uppercase tracking-[0.2em] text-[#c6a96b]">
+              Join the Case List
+            </p>
+
+            <p className="mt-3 leading-7 text-[#a9adb7]">
+              Get launch updates, new case drops, early access news, and future
+              investigation briefings.
+            </p>
+
+            <WaitlistForm />
+          </div>
         </div>
       </div>
 
