@@ -13,7 +13,17 @@ import {
   SectionHeader,
   StatusItem,
 } from "../components/PortalShared";
-import  globalStyles  from "../styles/portalStyles";
+import globalStyles from "../styles/portalStyles";
+
+const FINAL_RESOLUTION_EVIDENCE = {
+  id: "CASE-RESOLUTION",
+  title: "Case Resolution Report",
+  description: "Final verified case resolution and offender assessment.",
+  type: "image",
+  file: "/evidence/MCU_Case_Resolution_Report_v5.png",
+  status: "VERIFIED",
+  section: "reveal",
+};
 
 export default function Case001Portal() {
   const navigate = useNavigate();
@@ -52,7 +62,9 @@ export default function Case001Portal() {
       setView(parsed.view || "digital");
       setLockedOpen(Boolean(parsed.lockedOpen));
       setCaseSolved(Boolean(parsed.caseSolved));
-      setViewedEvidenceIds(Array.isArray(parsed.viewedEvidenceIds) ? parsed.viewedEvidenceIds : []);
+      setViewedEvidenceIds(
+        Array.isArray(parsed.viewedEvidenceIds) ? parsed.viewedEvidenceIds : []
+      );
     } catch {
       // ignore corrupted local storage
     }
@@ -105,6 +117,7 @@ export default function Case001Portal() {
   }, [lockedOpen, viewedEvidenceIds]);
 
   const visibleDigitalItems = evidenceData.filter((item) => item.section === "digital");
+  const visibleSecureItems = evidenceData.filter((item) => item.section === "secure");
 
   const pushSystemMessage = (type, text) => {
     setSystemMessage({ type, text });
@@ -113,19 +126,22 @@ export default function Case001Portal() {
   const unlockFiles = () => {
     const cleanKey = secondaryPassword.trim().toLowerCase();
 
-    if (cleanKey !== "1932") {
-      setUnlockError("ACCESS DENIED — INVALID SECONDARY KEY");
-      pushSystemMessage("error", "Secondary key rejected. Still guessing?");
-      return;
-    }
-
     if (!progressionReady) {
       setUnlockError(
         `ACCESS DENIED — REVIEW REQUIRED FILES (${requiredViewedCount}/${REQUIRED_FILE_IDS.length})`
       );
       pushSystemMessage(
         "warning",
-        "Secure decryption refused. Review the WhatsApp, Email, and Access Log first."
+        "Restricted archive unavailable. Review WhatsApp Extraction, Livestream Recording, and Email Archive first."
+      );
+      return;
+    }
+
+    if (cleanKey !== "hiddenisles") {
+      setUnlockError("ACCESS DENIED — INVALID SECONDARY KEY");
+      pushSystemMessage(
+        "error",
+        "Secondary key rejected. Restricted archive remains locked."
       );
       return;
     }
@@ -148,7 +164,7 @@ export default function Case001Portal() {
     if (!lockedOpen) {
       pushSystemMessage(
         "warning",
-        "Conclusion incomplete. Decrypt the restricted cyber file before final submission."
+        "Conclusion incomplete. Decrypt the restricted archive before final submission."
       );
       setView("locked");
       return;
@@ -191,6 +207,11 @@ export default function Case001Portal() {
     } else {
       pushSystemMessage("neutral", `${item.title} opened.`);
     }
+  };
+
+  const openFinalResolution = () => {
+    setSelectedEvidence(FINAL_RESOLUTION_EVIDENCE);
+    pushSystemMessage("success", "Final case resolution report opened.");
   };
 
   const resetCaseSession = () => {
@@ -363,7 +384,7 @@ export default function Case001Portal() {
                         />
                       </div>
                       <div className="progress-strip-note">
-                        Required: WhatsApp Extraction, Email Archive, Access Log
+                        Required: WhatsApp Extraction, Livestream Recording, Email Archive
                       </div>
                     </div>
 
@@ -390,7 +411,7 @@ export default function Case001Portal() {
                     {!lockedOpen ? (
                       <div className="unlock-panel">
                         <div className="restricted-title">ACCESS RESTRICTED</div>
-                        <div className="restricted-sub">SECURE FILE VAULT</div>
+                        <div className="restricted-sub">RESTRICTED ARCHIVE DETECTED</div>
 
                         <div className="unlock-requirements">
                           <div className={`unlock-requirement ${progressionReady ? "met" : ""}`}>
@@ -420,27 +441,23 @@ export default function Case001Portal() {
                         {unlockError && <div className="access-denied">{unlockError}</div>}
 
                         <div className="riddle-block">
+                          <p>Restricted archive detected.</p>
                           <p>
-                            “I speak without a mouth and hear without ears. I have no body, but I
-                            come alive with the wind.”
-                          </p>
-                          <p className="helper-note">
-                            Review the required evidence before attempting decryption.
+                            Access key appears linked to a concealed source term referenced across
+                            recovered digital and product-trace material.
                           </p>
                         </div>
                       </div>
                     ) : (
                       <div className="file-list">
-                        {evidenceData
-                          .filter((item) => item.section === "secure")
-                          .map((item, index) => (
-                            <EvidenceListItem
-                              key={item.id}
-                              index={index + 1}
-                              item={item}
-                              onOpen={openEvidence}
-                            />
-                          ))}
+                        {visibleSecureItems.map((item, index) => (
+                          <EvidenceListItem
+                            key={item.id}
+                            index={index + 1}
+                            item={item}
+                            onOpen={openEvidence}
+                          />
+                        ))}
                       </div>
                     )}
                   </section>
@@ -501,34 +518,8 @@ export default function Case001Portal() {
                         <div className="resolution-label">PRIMARY SUSPECT</div>
                         <div className="resolution-name">DANIEL KOVACS</div>
                         <div className="resolution-sub">
-                          Verified through recovered communication, access records, and decrypted
-                          cyber evidence.
-                        </div>
-                      </div>
-
-                      <div className="resolution-grid">
-                        <div className="resolution-card">
-                          <div className="resolution-card-title">Motive</div>
-                          <p>
-                            Financial and reputational pressure linked to product exposure and loss
-                            of control over the investigation narrative.
-                          </p>
-                        </div>
-
-                        <div className="resolution-card">
-                          <div className="resolution-card-title">Method</div>
-                          <p>
-                            Aconitine introduced through contaminated supplement material, masked
-                            within the victim’s established routine.
-                          </p>
-                        </div>
-
-                        <div className="resolution-card">
-                          <div className="resolution-card-title">Key Proof</div>
-                          <p>
-                            WhatsApp extraction, email archive, access logs, and decrypted cyber
-                            evidence establish timing, coordination, and intent.
-                          </p>
+                          Final assessment verified through recovered communication, livestream
+                          evidence, and decrypted cyber records.
                         </div>
                       </div>
 
@@ -552,10 +543,16 @@ export default function Case001Portal() {
                       </div>
 
                       <div className="resolution-status-line">
-                        CASE STATUS: OPEN — ACTIVE INVESTIGATION
+                        CASE STATUS: VERIFIED — OFFENDER IDENTIFIED
                       </div>
 
                       <div className="resolution-actions">
+                        <button
+                          className="terminal-button primary-button"
+                          onClick={openFinalResolution}
+                        >
+                          OPEN REPORT
+                        </button>
                         <button
                           className="terminal-button ghost-button"
                           onClick={() => setView("digital")}
@@ -563,7 +560,7 @@ export default function Case001Portal() {
                           REVIEW EVIDENCE
                         </button>
                         <button
-                          className="terminal-button primary-button"
+                          className="terminal-button ghost-button"
                           onClick={resetCaseSession}
                         >
                           RESET CASE

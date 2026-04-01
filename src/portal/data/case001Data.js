@@ -22,14 +22,14 @@ export const DIGITAL_EVIDENCE = [
   {
     id: "DIGITAL-03",
     title: "Email Archive",
-    description: "Recovered email correspondence connected to Daniel Kovacs.",
+    description: "Recovered email correspondence linked to the victim, Sara Malik, and Daniel Kovacs.",
     type: "image",
     file: "/evidence/digital-03-emailv2.png",
     status: "AVAILABLE",
     section: "digital",
   },
   {
-    id: "DIGITAL-05",
+    id: "DIGITAL-07",
     title: "Access Log",
     description: "Recovered secure access and building entry records.",
     type: "image",
@@ -39,18 +39,36 @@ export const DIGITAL_EVIDENCE = [
   },
   {
     id: "DIGITAL-04",
-    title: "Encrypted Data",
-    description: "Restricted cyber report and encrypted note. Secondary key required.",
+    title: "Recovered Secure Note",
+    description: "Partial secure note fragment recovered from Sara Malik device extraction.",
     type: "image",
-    file: "/evidence/digital-04-cyber-report.png",
+    file: "/evidence/DIGITAL-04_recovered_secure_note.png",
+    status: "RESTRICTED",
+    section: "secure",
+  },
+  {
+    id: "DIGITAL-05",
+    title: "Source / Order Correspondence",
+    description: "Recovered order correspondence linked to Daniel Kovacs and Hidden Isles Botanicals.",
+    type: "image",
+    file: "/evidence/DIGITAL-05_source_order_correspondence.png",
+    status: "RESTRICTED",
+    section: "secure",
+  },
+  {
+    id: "DIGITAL-06",
+    title: "DCCU Trace Summary",
+    description: "Restricted analyst summary tying recovered communications and procurement records together.",
+    type: "image",
+    file: "/evidence/DIGITAL-06_dccu_trace_summary.png",
     status: "RESTRICTED",
     section: "secure",
   },
 ];
 
-export const REQUIRED_FILE_IDS = ["DIGITAL-01", "DIGITAL-03", "DIGITAL-05"];
+export const REQUIRED_FILE_IDS = ["DIGITAL-01", "DIGITAL-02", "DIGITAL-03"];
 
 export const INITIAL_MESSAGE = {
   type: "neutral",
-  text: "DCCU system online. Review all available material before submitting a conclusion.",
+  text: "DCCU system online. Review all required material before accessing restricted files or submitting a conclusion.",
 };
