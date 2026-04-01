@@ -9,7 +9,7 @@ export default function PrivacyPage() {
         <p className="text-sm text-gray-400">Last updated: 2026</p>
 
         <p className="text-gray-300">
-          Welcome to The Yo Case Files ("we", "our", "us"). We respect your
+          Welcome to The Yo Case Files. We respect your
           privacy and are committed to protecting your personal data.
         </p>
 
@@ -69,7 +69,7 @@ export default function PrivacyPage() {
         <h2 className="mt-6 text-xl font-semibold text-[#f5efe4]">
           7. Contact
         </h2>
-        <p className="text-gray-300">Email: hello@theyocasefiles.com</p>
+        <p className="text-gray-300">Email: detective.good@theyocasefiles.com</p>
       </div>
     </div>
   );
