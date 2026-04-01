@@ -1203,8 +1203,7 @@ input {
   width: 72px;
   height: 72px;
   left: 14px;
-  top: 50%;
-  transform: translateY(-50%);
+  top: calc(50% - 36px);
 }
 
   .header-left {
