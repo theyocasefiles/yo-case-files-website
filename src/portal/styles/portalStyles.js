@@ -1199,11 +1199,13 @@ input {
     padding-right: 14px;
   }
 
-  .login-header-logo {
-    width: 72px;
-    height: 72px;
-    top: calc(50% - 32px);
-  }
+  .panel-logo.login-header-logo {
+  width: 72px;
+  height: 72px;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+}
 
   .header-left {
     gap: 10px;
