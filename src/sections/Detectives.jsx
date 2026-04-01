@@ -23,10 +23,11 @@ export default function Detectives() {
           </div>
 
           <div className="rounded-3xl border border-white/10 bg-white/5 p-3 shadow-[0_20px_60px_rgba(0,0,0,0.35)]">
-            <img
-              src="/images/about-team-triptych.png"
-              alt="The team behind The Yo Case Files"
-              className="h-[320px] w-full rounded-[20px] object-cover md:h-full"
+  <img
+    src="/images/about-team-triptych.png"
+    alt="The team behind The Yo Case Files"
+    className="h-[320px] w-full rounded-[20px] bg-[#0b1220] object-contain md:h-[420px]"
+
             />
           </div>
         </div>
