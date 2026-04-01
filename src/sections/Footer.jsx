@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { Instagram, Mail } from "lucide-react";
+import { Mail } from "lucide-react";
 import WaitlistForm from "../components/WaitlistForm";
 
 const socialLinks = [
@@ -35,6 +35,27 @@ const infoLinks = [
   { label: "Terms & Conditions", href: "/terms" },
 ];
 
+function InstagramIcon({ size = 18 }) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+    >
+      <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
+      <path d="M16 11.37a4 4 0 1 1-1.37-2.75A4 4 0 0 1 16 11.37z" />
+      <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
+    </svg>
+  );
+}
+
 function TikTokIcon({ size = 18 }) {
   return (
     <svg
@@ -51,18 +72,20 @@ function TikTokIcon({ size = 18 }) {
 }
 
 function SocialIcon({ icon, size = 18 }) {
-  if (icon === "instagram") return <Instagram size={size} />;
-  if (icon === "mail") return <Mail size={size} />;
+  if (icon === "instagram") return <InstagramIcon size={size} />;
   if (icon === "tiktok") return <TikTokIcon size={size} />;
+  if (icon === "mail") return <Mail size={size} />;
   return null;
 }
 
 function SocialIconLink({ icon, href, label }) {
+  const isExternal = href.startsWith("http");
+
   return (
     <a
       href={href}
-      target={href.startsWith("http") ? "_blank" : undefined}
-      rel={href.startsWith("http") ? "noopener noreferrer" : undefined}
+      target={isExternal ? "_blank" : undefined}
+      rel={isExternal ? "noopener noreferrer" : undefined}
       aria-label={label}
       className="flex h-11 w-11 items-center justify-center rounded-2xl border border-[#2b2e34] bg-[#13151a] text-[#f5efe4] transition duration-300 hover:-translate-y-0.5 hover:border-[#c6a96b] hover:text-[#c6a96b]"
     >
