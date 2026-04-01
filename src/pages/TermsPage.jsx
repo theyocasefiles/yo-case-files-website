@@ -62,7 +62,7 @@ export default function TermsPage() {
         <h2 className="mt-6 text-xl font-semibold text-[#f5efe4]">
           7. Contact
         </h2>
-        <p className="text-gray-300">Email: hello@theyocasefiles.com</p>
+        <p className="text-gray-300">Email: detective.good@theyocasefiles.com</p>
       </div>
     </div>
   );
