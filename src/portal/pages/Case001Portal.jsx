@@ -443,8 +443,8 @@ export default function Case001Portal() {
                         <div className="riddle-block">
                           <p>Restricted archive detected.</p>
                           <p>
-                            Access key appears linked to a concealed source term referenced across
-                            recovered digital and product-trace material.
+                            Access key appears linked to a concealed source term associated with
+                             recovered product-trace and account activity records.
                           </p>
                         </div>
                       </div>
