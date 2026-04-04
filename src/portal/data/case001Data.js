@@ -4,7 +4,7 @@ export const DIGITAL_EVIDENCE = [
   {
     id: "DIGITAL-01",
     title: "WhatsApp Extraction",
-    description: "Recovered WhatsApp conversation between Sara Malik and Lena Varga.",
+    description: "Recovered WhatsApp message threads linked to Lena Varga, Sara Malik and Maya Brooks.",
     type: "image",
     file: "/evidence/digital-01-whatsappv2.png",
     status: "AVAILABLE",
@@ -22,7 +22,7 @@ export const DIGITAL_EVIDENCE = [
   {
     id: "DIGITAL-03",
     title: "Email Archive",
-    description: "Recovered email correspondence linked to the victim, Sara Malik, and Daniel Kovacs.",
+    description: "Recovered email correspondence linked to Lena Varga and Sara Malik.",
     type: "image",
     file: "/evidence/digital-03-emailv2.png",
     status: "AVAILABLE",
@@ -31,7 +31,7 @@ export const DIGITAL_EVIDENCE = [
   {
     id: "DIGITAL-07",
     title: "Access Log",
-    description: "Recovered secure access and building entry records.",
+    description: "Recovered session activity log linked to Daniel Kovacs account usage.",
     type: "image",
     file: "/evidence/digital-05-access-log.png",
     status: "AVAILABLE",
