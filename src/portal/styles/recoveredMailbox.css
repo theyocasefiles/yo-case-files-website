@@ -49,7 +49,7 @@
 
 .mailbox-shell {
   display: grid;
-  grid-template-columns: 280px 420px minmax(0, 1fr);
+  grid-template-columns: 250px 360px minmax(520px, 1fr);
   min-height: 720px;
 }
 
@@ -247,7 +247,7 @@
 
 .reader-subject {
   margin: 6px 0 0;
-  font-size: 24px;
+  font-size: 20px;
   line-height: 1.2;
   color: #f4f8fc;
 }
@@ -261,8 +261,9 @@
 
 .meta-row {
   display: grid;
-  grid-template-columns: 68px 1fr;
+  grid-template-columns: 72px minmax(0, 1fr);
   gap: 14px;
+  align-items: start;
 }
 
 .meta-label {
@@ -274,6 +275,7 @@
   line-height: 1.5;
   color: #d9e7f5;
   word-break: break-word;
+  overflow-wrap: anywhere;
 }
 
 .reader-body {
