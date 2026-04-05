@@ -253,10 +253,10 @@
 }
 
 .reader-meta {
-  padding: 18px;
+  padding: 16px 18px;
   border-bottom: 1px solid rgba(120, 170, 220, 0.12);
   display: grid;
-  gap: 10px;
+  gap: 8px;
 }
 
 .meta-row {
