@@ -1,10 +1,11 @@
-export const STORAGE_KEY = "yo_case_files_case001_portal_state_v3";
+export const STORAGE_KEY = "yo_case_files_case001_portal_state_v4";
 
 export const DIGITAL_EVIDENCE = [
   {
     id: "DIGITAL-01",
     title: "WhatsApp Extraction",
-    description: "Recovered WhatsApp message threads linked to Lena Varga, Sara Malik and Maya Brooks.",
+    description:
+      "Recovered WhatsApp message threads linked to Lena Varga, Sara Malik and Maya Brooks.",
     type: "image",
     file: "/evidence/digital-01-whatsappv2.png",
     status: "AVAILABLE",
@@ -21,15 +22,6 @@ export const DIGITAL_EVIDENCE = [
   },
   {
     id: "DIGITAL-03",
-    title: "Email Archive",
-    description: "Recovered email correspondence linked to Lena Varga and Sara Malik.",
-    type: "image",
-    file: "/evidence/digital-03-emailv2.png",
-    status: "AVAILABLE",
-    section: "digital",
-  },
-  {
-    id: "DIGITAL-07",
     title: "Access Log",
     description: "Recovered session activity log linked to Daniel Kovacs account usage.",
     type: "image",
@@ -40,29 +32,12 @@ export const DIGITAL_EVIDENCE = [
   {
     id: "DIGITAL-04",
     title: "Recovered Secure Note",
-    description: "Partial secure note fragment recovered from Sara Malik device extraction.",
+    description:
+      "Partial secure note fragment recovered from Sara Malik device extraction.",
     type: "image",
     file: "/evidence/DIGITAL-04_recovered_secure_note.png",
-    status: "RESTRICTED",
-    section: "secure",
-  },
-  {
-    id: "DIGITAL-05",
-    title: "Source / Order Correspondence",
-    description: "Recovered order correspondence linked to Daniel Kovacs and Hidden Isles Botanicals.",
-    type: "image",
-    file: "/evidence/DIGITAL-05_source_order_correspondence.png",
-    status: "RESTRICTED",
-    section: "secure",
-  },
-  {
-    id: "DIGITAL-06",
-    title: "DCCU Trace Summary",
-    description: "Restricted analyst summary tying recovered communications and procurement records together.",
-    type: "image",
-    file: "/evidence/DIGITAL-06_dccu_trace_summary.png",
-    status: "RESTRICTED",
-    section: "secure",
+    status: "AVAILABLE",
+    section: "digital",
   },
 ];
 
@@ -70,5 +45,5 @@ export const REQUIRED_FILE_IDS = ["DIGITAL-01", "DIGITAL-02", "DIGITAL-03"];
 
 export const INITIAL_MESSAGE = {
   type: "neutral",
-  text: "DCCU system online. Review all required material before accessing restricted files or submitting a conclusion.",
+  text: "DCCU system online. Review all required material before accessing recovered mailboxes or submitting a conclusion.",
 };

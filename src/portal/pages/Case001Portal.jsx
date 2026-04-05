@@ -13,6 +13,7 @@ import {
   SectionHeader,
   StatusItem,
 } from "../components/PortalShared";
+import RecoveredMailbox from "../components/RecoveredMailbox";
 import globalStyles from "../styles/portalStyles";
 
 const FINAL_RESOLUTION_EVIDENCE = {
@@ -30,10 +31,6 @@ export default function Case001Portal() {
 
   const [view, setView] = useState("digital");
   const [selectedEvidence, setSelectedEvidence] = useState(null);
-
-  const [secondaryPassword, setSecondaryPassword] = useState("");
-  const [lockedOpen, setLockedOpen] = useState(false);
-  const [unlockError, setUnlockError] = useState("");
 
   const [answer, setAnswer] = useState("");
   const [caseSolved, setCaseSolved] = useState(false);
@@ -60,7 +57,6 @@ export default function Case001Portal() {
     try {
       const parsed = JSON.parse(saved);
       setView(parsed.view || "digital");
-      setLockedOpen(Boolean(parsed.lockedOpen));
       setCaseSolved(Boolean(parsed.caseSolved));
       setViewedEvidenceIds(
         Array.isArray(parsed.viewedEvidenceIds) ? parsed.viewedEvidenceIds : []
@@ -73,13 +69,12 @@ export default function Case001Portal() {
   useEffect(() => {
     const payload = {
       view,
-      lockedOpen,
       caseSolved,
       viewedEvidenceIds,
     };
 
     localStorage.setItem(STORAGE_KEY, JSON.stringify(payload));
-  }, [view, lockedOpen, caseSolved, viewedEvidenceIds]);
+  }, [view, caseSolved, viewedEvidenceIds]);
 
   useEffect(() => {
     const onKeyDown = (e) => {
@@ -99,56 +94,17 @@ export default function Case001Portal() {
   }, []);
 
   const evidenceData = useMemo(() => {
-    return DIGITAL_EVIDENCE.map((item) => {
-      if (item.section === "secure") {
-        return {
-          ...item,
-          locked: !lockedOpen,
-          viewed: viewedEvidenceIds.includes(item.id),
-        };
-      }
-
-      return {
-        ...item,
-        locked: false,
-        viewed: viewedEvidenceIds.includes(item.id),
-      };
-    });
-  }, [lockedOpen, viewedEvidenceIds]);
+    return DIGITAL_EVIDENCE.map((item) => ({
+      ...item,
+      locked: false,
+      viewed: viewedEvidenceIds.includes(item.id),
+    }));
+  }, [viewedEvidenceIds]);
 
   const visibleDigitalItems = evidenceData.filter((item) => item.section === "digital");
-  const visibleSecureItems = evidenceData.filter((item) => item.section === "secure");
 
   const pushSystemMessage = (type, text) => {
     setSystemMessage({ type, text });
-  };
-
-  const unlockFiles = () => {
-    const cleanKey = secondaryPassword.trim().toLowerCase();
-
-    if (!progressionReady) {
-      setUnlockError(
-        `ACCESS DENIED — REVIEW REQUIRED FILES (${requiredViewedCount}/${REQUIRED_FILE_IDS.length})`
-      );
-      pushSystemMessage(
-        "warning",
-        "Restricted archive unavailable. Review WhatsApp Extraction, Livestream Recording, and Email Archive first."
-      );
-      return;
-    }
-
-    if (cleanKey !== "hiddenisles") {
-      setUnlockError("ACCESS DENIED — INVALID SECONDARY KEY");
-      pushSystemMessage(
-        "error",
-        "Secondary key rejected. Restricted archive remains locked."
-      );
-      return;
-    }
-
-    setLockedOpen(true);
-    setUnlockError("");
-    pushSystemMessage("success", "Decryption key accepted. Restricted material unlocked.");
   };
 
   const submitAnswer = () => {
@@ -161,12 +117,12 @@ export default function Case001Portal() {
       return;
     }
 
-    if (!lockedOpen) {
+    if (!progressionReady) {
       pushSystemMessage(
         "warning",
-        "Conclusion incomplete. Decrypt the restricted archive before final submission."
+        "Conclusion incomplete. Review the required digital evidence before final submission."
       );
-      setView("locked");
+      setView("digital");
       return;
     }
 
@@ -193,12 +149,6 @@ export default function Case001Portal() {
   };
 
   const openEvidence = (item) => {
-    if (item.locked) {
-      setView("locked");
-      pushSystemMessage("warning", "Restricted file selected. Secondary decryption required.");
-      return;
-    }
-
     setViewedEvidenceIds((prev) => (prev.includes(item.id) ? prev : [...prev, item.id]));
     setSelectedEvidence(item);
 
@@ -217,10 +167,7 @@ export default function Case001Portal() {
   const resetCaseSession = () => {
     validationTimers.current.forEach((timer) => clearTimeout(timer));
     setSelectedEvidence(null);
-    setSecondaryPassword("");
-    setUnlockError("");
     setViewedEvidenceIds([]);
-    setLockedOpen(false);
     setAnswer("");
     setCaseSolved(false);
     setView("digital");
@@ -233,10 +180,7 @@ export default function Case001Portal() {
     validationTimers.current.forEach((timer) => clearTimeout(timer));
     setView("digital");
     setSelectedEvidence(null);
-    setSecondaryPassword("");
-    setUnlockError("");
     setViewedEvidenceIds([]);
-    setLockedOpen(false);
     setAnswer("");
     setCaseSolved(false);
     setIsValidatingConclusion(false);
@@ -293,10 +237,10 @@ export default function Case001Portal() {
                 DIGITAL
               </button>
               <button
-                className={`nav-tab ${view === "locked" ? "active" : ""}`}
-                onClick={() => setView("locked")}
+                className={`nav-tab ${view === "mailboxes" ? "active" : ""}`}
+                onClick={() => setView("mailboxes")}
               >
-                SECURE
+                MAILBOXES
               </button>
               <button
                 className={`nav-tab ${view === "answer" ? "active" : ""}`}
@@ -317,10 +261,10 @@ export default function Case001Portal() {
                   onClick={() => setView("digital")}
                 />
                 <FileRow
-                  active={view === "locked"}
-                  label={lockedOpen ? "ENCRYPTED DATA" : "ENCRYPTED DATA — LOCKED"}
-                  icon="🔒"
-                  onClick={() => setView("locked")}
+                  active={view === "mailboxes"}
+                  label="RECOVERED MAILBOXES"
+                  icon="✉"
+                  onClick={() => setView("mailboxes")}
                 />
                 <FileRow
                   active={view === "answer"}
@@ -347,9 +291,9 @@ export default function Case001Portal() {
                     ok={progressionReady}
                   />
                   <StatusItem
-                    label="SECURE FILES"
-                    value={lockedOpen ? "UNLOCKED" : "RESTRICTED"}
-                    ok={lockedOpen}
+                    label="MAIL RECOVERY"
+                    value="AVAILABLE"
+                    ok
                   />
                   <StatusItem
                     label="CASE STATUS"
@@ -384,7 +328,7 @@ export default function Case001Portal() {
                         />
                       </div>
                       <div className="progress-strip-note">
-                        Required: WhatsApp Extraction, Livestream Recording, Email Archive
+                        Review the required digital files before submitting your conclusion.
                       </div>
                     </div>
 
@@ -401,65 +345,14 @@ export default function Case001Portal() {
                   </section>
                 )}
 
-                {view === "locked" && (
+                {view === "mailboxes" && (
                   <section>
                     <SectionHeader
-                      title="ENCRYPTED DATA"
-                      subtitle="Access to restricted cyber materials requires a secondary key."
+                      title="RECOVERED MAILBOXES"
+                      subtitle="Recovered account structures restored from cached credentials and session traces."
                     />
 
-                    {!lockedOpen ? (
-                      <div className="unlock-panel">
-                        <div className="restricted-title">ACCESS RESTRICTED</div>
-                        <div className="restricted-sub">RESTRICTED ARCHIVE DETECTED</div>
-
-                        <div className="unlock-requirements">
-                          <div className={`unlock-requirement ${progressionReady ? "met" : ""}`}>
-                            REVIEW REQUIRED FILES: {requiredViewedCount}/{REQUIRED_FILE_IDS.length}
-                          </div>
-                          <div className="unlock-requirement">SECONDARY KEY REQUIRED</div>
-                        </div>
-
-                        <div className="form-block narrow">
-                          <label className="field-label">ENTER SECONDARY KEY</label>
-                          <input
-                            className="terminal-input"
-                            type="password"
-                            placeholder="ENTER KEY"
-                            value={secondaryPassword}
-                            onChange={(e) => setSecondaryPassword(e.target.value)}
-                            onKeyDown={(e) => {
-                              if (e.key === "Enter") unlockFiles();
-                            }}
-                          />
-                        </div>
-
-                        <button className="terminal-button primary-button" onClick={unlockFiles}>
-                          UNLOCK
-                        </button>
-
-                        {unlockError && <div className="access-denied">{unlockError}</div>}
-
-                        <div className="riddle-block">
-                          <p>Restricted archive detected.</p>
-                          <p>
-                            Access key appears linked to a concealed source term associated with
-                             recovered product-trace and account activity records.
-                          </p>
-                        </div>
-                      </div>
-                    ) : (
-                      <div className="file-list">
-                        {visibleSecureItems.map((item, index) => (
-                          <EvidenceListItem
-                            key={item.id}
-                            index={index + 1}
-                            item={item}
-                            onOpen={openEvidence}
-                          />
-                        ))}
-                      </div>
-                    )}
+                    <RecoveredMailbox />
                   </section>
                 )}
 
@@ -519,7 +412,7 @@ export default function Case001Portal() {
                         <div className="resolution-name">DANIEL KOVACS</div>
                         <div className="resolution-sub">
                           Final assessment verified through recovered communication, livestream
-                          evidence, and decrypted cyber records.
+                          evidence, and mailbox records.
                         </div>
                       </div>
 
@@ -530,10 +423,8 @@ export default function Case001Portal() {
                         </div>
 
                         <div className="resolution-mini-card">
-                          <div className="resolution-mini-label">SECURE DATA</div>
-                          <div className="resolution-mini-value">
-                            {lockedOpen ? "DECRYPTED" : "RESTRICTED"}
-                          </div>
+                          <div className="resolution-mini-label">MAIL RECOVERY</div>
+                          <div className="resolution-mini-value">ACCESSED</div>
                         </div>
 
                         <div className="resolution-mini-card">
