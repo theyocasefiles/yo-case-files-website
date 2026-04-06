@@ -55,6 +55,8 @@ export default function RecoveredMailbox() {
   const [selectedFolder, setSelectedFolder] = useState("inbox");
   const [selectedEmailId, setSelectedEmailId] = useState(null);
 
+  const [overlayImage, setOverlayImage] = useState(null);
+
   const unlockedMailboxList = useMemo(() => {
     return recoveredMailboxes.filter((mailbox) => unlockedMailboxes[mailbox.id]);
   }, [unlockedMailboxes]);
@@ -73,6 +75,17 @@ export default function RecoveredMailbox() {
       setSelectedMailboxId(unlockedMailboxList[0].id);
     }
   }, [unlockedMailboxList, selectedMailboxId]);
+
+  useEffect(() => {
+    const onKeyDown = (event) => {
+      if (event.key === "Escape") {
+        setOverlayImage(null);
+      }
+    };
+
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, []);
 
   const selectedMailbox = useMemo(() => {
     return (
@@ -188,6 +201,10 @@ export default function RecoveredMailbox() {
     }));
   }
 
+  function openOverlay(imageSrc, imageAlt) {
+    setOverlayImage({ src: imageSrc, alt: imageAlt });
+  }
+
   function renderHintPanel(mailboxId) {
     if (!showHintChoices[mailboxId]) return null;
 
@@ -227,23 +244,47 @@ export default function RecoveredMailbox() {
             <div className="panel-label">Recovered public-facing profile capture</div>
 
             {mailboxId === "sara-malik" && (
-              <div className="recovered-profile-image-wrap large">
-                <img
-                  src="/evidence/recovered-profile-sara.png"
-                  alt="Recovered Sara Malik social profile capture"
-                  className="recovered-profile-image large"
-                />
-              </div>
+              <button
+                type="button"
+                className="recovered-profile-button"
+                onClick={() =>
+                  openOverlay(
+                    "/evidence/recovered-profile-sara.png",
+                    "Recovered Sara Malik social profile capture"
+                  )
+                }
+              >
+                <div className="recovered-profile-image-wrap large">
+                  <img
+                    src="/evidence/recovered-profile-sara.png"
+                    alt="Recovered Sara Malik social profile capture"
+                    className="recovered-profile-image large"
+                  />
+                </div>
+                <div className="recovered-profile-open-text">Tap to enlarge</div>
+              </button>
             )}
 
             {mailboxId === "daniel-kovacs" && (
-              <div className="recovered-profile-image-wrap large">
-                <img
-                  src="/evidence/recovered-profile-daniel.png"
-                  alt="Recovered Daniel Kovacs social profile capture"
-                  className="recovered-profile-image large"
-                />
-              </div>
+              <button
+                type="button"
+                className="recovered-profile-button"
+                onClick={() =>
+                  openOverlay(
+                    "/evidence/recovered-profile-daniel.png",
+                    "Recovered Daniel Kovacs social profile capture"
+                  )
+                }
+              >
+                <div className="recovered-profile-image-wrap large">
+                  <img
+                    src="/evidence/recovered-profile-daniel.png"
+                    alt="Recovered Daniel Kovacs social profile capture"
+                    className="recovered-profile-image large"
+                  />
+                </div>
+                <div className="recovered-profile-open-text">Tap to enlarge</div>
+              </button>
             )}
           </div>
         )}
@@ -257,340 +298,365 @@ export default function RecoveredMailbox() {
   );
 
   return (
-    <section className="recovered-mailbox">
-      <div className="mailbox-topbar">
-        <div>
-          <div className="mailbox-kicker">DCCU MAIL RECOVERY CONSOLE</div>
-          <h2 className="mailbox-title">Recovered Mail Archive</h2>
-          <p className="mailbox-subtitle">
-            Recovered mailbox structure restored from cached credentials,
-            session traces, and local mail fragments. Some mailbox nodes remain
-            credential-locked and require manual recovery.
-          </p>
-        </div>
-      </div>
-
-      {allLocked ? (
-        <div className="mailbox-lockscreen">
-          <div className="lockscreen-header">
-            <div className="panel-label">Recovered Mailbox Access</div>
-            <h3 className="lockscreen-title">
-              Credential-Protected Mailbox Nodes Detected
-            </h3>
-            <p className="lockscreen-subtitle">
-              Two recoverable accounts were identified during session
-              reconstruction. Each mailbox requires an individual password
-              recovered from associated public-facing material.
+    <>
+      <section className="recovered-mailbox">
+        <div className="mailbox-topbar">
+          <div>
+            <div className="mailbox-kicker">DCCU MAIL RECOVERY CONSOLE</div>
+            <h2 className="mailbox-title">Recovered Mail Archive</h2>
+            <p className="mailbox-subtitle">
+              Recovered mailbox structure restored from cached credentials,
+              session traces, and local mail fragments. Some mailbox nodes remain
+              credential-locked and require manual recovery.
             </p>
           </div>
-
-          <div className="lock-card-grid">
-            {recoveredMailboxes.map((mailbox) => {
-              const mailboxId = mailbox.id;
-              const isUnlocked = unlockedMailboxes[mailboxId];
-
-              return (
-                <section
-                  key={mailboxId}
-                  className={`lock-card ${isUnlocked ? "unlocked" : ""}`}
-                >
-                  <div className="lock-card-top">
-                    <div>
-                      <div className="panel-label">Recovered Account</div>
-                      <h4 className="lock-card-title">{mailbox.owner}</h4>
-                      <div className="lock-card-address">{mailbox.emailAddress}</div>
-                    </div>
-
-                    <div
-                      className={`lock-status-chip ${isUnlocked ? "unlocked" : "locked"}`}
-                    >
-                      {isUnlocked ? "Unlocked" : "Locked"}
-                    </div>
-                  </div>
-
-                  <div className="lock-card-body">
-                    <div className="lock-meta-row">
-                      <span className="meta-label">Recovery Status</span>
-                      <span className="meta-value">{mailbox.recoveryStatus}</span>
-                    </div>
-
-                    <form
-                      onSubmit={(event) => handlePasswordSubmit(event, mailboxId)}
-                      className="lock-form"
-                    >
-                      <label className="lock-label" htmlFor={`password-${mailboxId}`}>
-                        Mailbox Password
-                      </label>
-
-                      <input
-                        id={`password-${mailboxId}`}
-                        type="password"
-                        className="lock-input"
-                        value={passwordInputs[mailboxId]}
-                        onChange={(event) =>
-                          handlePasswordChange(mailboxId, event.target.value)
-                        }
-                        placeholder="Enter recovered credential"
-                        autoComplete="off"
-                      />
-
-                      {passwordErrors[mailboxId] && (
-                        <div className="lock-error">{passwordErrors[mailboxId]}</div>
-                      )}
-
-                      <div className="lock-actions">
-                        <button type="submit" className="lock-button primary">
-                          Unlock Mailbox
-                        </button>
-
-                        <button
-                          type="button"
-                          className="lock-button secondary"
-                          onClick={() => toggleHintChoices(mailboxId)}
-                        >
-                          Password Reminder
-                        </button>
-                      </div>
-                    </form>
-
-                    {renderHintPanel(mailboxId)}
-                  </div>
-                </section>
-              );
-            })}
-          </div>
         </div>
-      ) : (
-        <>
-          <div className="mailbox-unlock-banner">
-            <div>
-              <div className="panel-label">Recovered Access Status</div>
-              <div className="unlock-banner-text">
-                {unlockedMailboxList.length === 1
-                  ? "1 mailbox successfully restored."
-                  : `${unlockedMailboxList.length} mailboxes successfully restored.`}
-              </div>
+
+        {allLocked ? (
+          <div className="mailbox-lockscreen">
+            <div className="lockscreen-header">
+              <div className="panel-label">Recovered Mailbox Access</div>
+              <h3 className="lockscreen-title">
+                Credential-Protected Mailbox Nodes Detected
+              </h3>
+              <p className="lockscreen-subtitle">
+                Two recoverable accounts were identified during session
+                reconstruction. Each mailbox requires an individual password
+                recovered from associated public-facing material.
+              </p>
             </div>
 
-            <div className="unlock-banner-actions">
-              {stillLockedMailboxes.map((mailbox) => (
-                <button
-                  key={mailbox.id}
-                  type="button"
-                  className="inline-unlock-chip"
-                  onClick={() => toggleHintChoices(mailbox.id)}
-                >
-                  {mailbox.owner} still locked
-                </button>
-              ))}
-            </div>
-          </div>
-
-          {stillLockedMailboxes.length > 0 && (
-            <div className="mailbox-inline-locks">
-              {stillLockedMailboxes.map((mailbox) => {
+            <div className="lock-card-grid">
+              {recoveredMailboxes.map((mailbox) => {
                 const mailboxId = mailbox.id;
+                const isUnlocked = unlockedMailboxes[mailboxId];
 
                 return (
-                  <section key={mailboxId} className="inline-lock-card">
-                    <div className="inline-lock-head">
+                  <section
+                    key={mailboxId}
+                    className={`lock-card ${isUnlocked ? "unlocked" : ""}`}
+                  >
+                    <div className="lock-card-top">
                       <div>
-                        <div className="panel-label">Locked Mailbox Node</div>
-                        <div className="inline-lock-title">{mailbox.owner}</div>
+                        <div className="panel-label">Recovered Account</div>
+                        <h4 className="lock-card-title">{mailbox.owner}</h4>
+                        <div className="lock-card-address">{mailbox.emailAddress}</div>
                       </div>
-                      <div className="lock-status-chip locked">Locked</div>
+
+                      <div
+                        className={`lock-status-chip ${isUnlocked ? "unlocked" : "locked"}`}
+                      >
+                        {isUnlocked ? "Unlocked" : "Locked"}
+                      </div>
                     </div>
 
-                    <form
-                      onSubmit={(event) => handlePasswordSubmit(event, mailboxId)}
-                      className="inline-lock-form"
-                    >
-                      <input
-                        type="password"
-                        className="lock-input"
-                        value={passwordInputs[mailboxId]}
-                        onChange={(event) =>
-                          handlePasswordChange(mailboxId, event.target.value)
-                        }
-                        placeholder={`Enter password for ${mailbox.owner}`}
-                        autoComplete="off"
-                      />
-
-                      <div className="lock-actions">
-                        <button type="submit" className="lock-button primary">
-                          Unlock
-                        </button>
-                        <button
-                          type="button"
-                          className="lock-button secondary"
-                          onClick={() => toggleHintChoices(mailboxId)}
-                        >
-                          Password Reminder
-                        </button>
+                    <div className="lock-card-body">
+                      <div className="lock-meta-row">
+                        <span className="meta-label">Recovery Status</span>
+                        <span className="meta-value">{mailbox.recoveryStatus}</span>
                       </div>
-                    </form>
 
-                    {passwordErrors[mailboxId] && (
-                      <div className="lock-error inline-error">
-                        {passwordErrors[mailboxId]}
-                      </div>
-                    )}
+                      <form
+                        onSubmit={(event) => handlePasswordSubmit(event, mailboxId)}
+                        className="lock-form"
+                      >
+                        <label className="lock-label" htmlFor={`password-${mailboxId}`}>
+                          Mailbox Password
+                        </label>
 
-                    {renderHintPanel(mailboxId)}
+                        <input
+                          id={`password-${mailboxId}`}
+                          type="password"
+                          className="lock-input"
+                          value={passwordInputs[mailboxId]}
+                          onChange={(event) =>
+                            handlePasswordChange(mailboxId, event.target.value)
+                          }
+                          placeholder="Enter recovered credential"
+                          autoComplete="off"
+                        />
+
+                        {passwordErrors[mailboxId] && (
+                          <div className="lock-error">{passwordErrors[mailboxId]}</div>
+                        )}
+
+                        <div className="lock-actions">
+                          <button type="submit" className="lock-button primary">
+                            Unlock Mailbox
+                          </button>
+
+                          <button
+                            type="button"
+                            className="lock-button secondary"
+                            onClick={() => toggleHintChoices(mailboxId)}
+                          >
+                            Password Reminder
+                          </button>
+                        </div>
+                      </form>
+
+                      {renderHintPanel(mailboxId)}
+                    </div>
                   </section>
                 );
               })}
             </div>
-          )}
-
-          <div className="mailbox-shell">
-            <aside className="mailbox-sidebar">
-              <div className="panel-block">
-                <div className="panel-label">Recovered Accounts</div>
-
-                <div className="mailbox-account-list">
-                  {unlockedMailboxList.map((mailbox) => {
-                    const isActive = mailbox.id === selectedMailboxId;
-
-                    return (
-                      <button
-                        key={mailbox.id}
-                        type="button"
-                        className={`mailbox-account-button ${isActive ? "active" : ""}`}
-                        onClick={() => {
-                          setSelectedMailboxId(mailbox.id);
-                          setSelectedFolder("inbox");
-                        }}
-                      >
-                        <span className="account-owner">{mailbox.owner}</span>
-                        <span className="account-address">{mailbox.emailAddress}</span>
-                        <span className="account-status">{mailbox.recoveryStatus}</span>
-                      </button>
-                    );
-                  })}
+          </div>
+        ) : (
+          <>
+            <div className="mailbox-unlock-banner">
+              <div>
+                <div className="panel-label">Recovered Access Status</div>
+                <div className="unlock-banner-text">
+                  {unlockedMailboxList.length === 1
+                    ? "1 mailbox successfully restored."
+                    : `${unlockedMailboxList.length} mailboxes successfully restored.`}
                 </div>
               </div>
 
-              <div className="panel-block">
-                <div className="panel-label">Folders</div>
-
-                <div className="folder-list">
-                  {availableFolders.map((folder) => {
-                    const isActive = folder === selectedFolder;
-
-                    return (
-                      <button
-                        key={folder}
-                        type="button"
-                        className={`folder-button ${isActive ? "active" : ""}`}
-                        onClick={() => setSelectedFolder(folder)}
-                      >
-                        <span>{FOLDER_LABELS[folder] || folder}</span>
-                        <span className="folder-count">{folderCounts[folder] || 0}</span>
-                      </button>
-                    );
-                  })}
-                </div>
+              <div className="unlock-banner-actions">
+                {stillLockedMailboxes.map((mailbox) => (
+                  <button
+                    key={mailbox.id}
+                    type="button"
+                    className="inline-unlock-chip"
+                    onClick={() => toggleHintChoices(mailbox.id)}
+                  >
+                    {mailbox.owner} still locked
+                  </button>
+                ))}
               </div>
+            </div>
 
-              <div className="mailbox-list-panel">
-                <div className="panel-header">
-                  <div>
-                    <div className="panel-label">Mailbox</div>
-                    <div className="panel-title-text">{selectedMailbox?.emailAddress}</div>
-                  </div>
-                  <div className="panel-folder-chip">
-                    {FOLDER_LABELS[selectedFolder] || selectedFolder}
-                  </div>
-                </div>
+            {stillLockedMailboxes.length > 0 && (
+              <div className="mailbox-inline-locks">
+                {stillLockedMailboxes.map((mailbox) => {
+                  const mailboxId = mailbox.id;
 
-                <div className="message-list">
-                  {currentEmails.length === 0 ? (
-                    <div className="empty-state">
-                      No recoverable messages found in this folder.
-                    </div>
-                  ) : (
-                    currentEmails.map((email) => {
-                      const isActive = selectedEmail?.id === email.id;
+                  return (
+                    <section key={mailboxId} className="inline-lock-card">
+                      <div className="inline-lock-head">
+                        <div>
+                          <div className="panel-label">Locked Mailbox Node</div>
+                          <div className="inline-lock-title">{mailbox.owner}</div>
+                        </div>
+                        <div className="lock-status-chip locked">Locked</div>
+                      </div>
+
+                      <form
+                        onSubmit={(event) => handlePasswordSubmit(event, mailboxId)}
+                        className="inline-lock-form"
+                      >
+                        <input
+                          type="password"
+                          className="lock-input"
+                          value={passwordInputs[mailboxId]}
+                          onChange={(event) =>
+                            handlePasswordChange(mailboxId, event.target.value)
+                          }
+                          placeholder={`Enter password for ${mailbox.owner}`}
+                          autoComplete="off"
+                        />
+
+                        <div className="lock-actions">
+                          <button type="submit" className="lock-button primary">
+                            Unlock
+                          </button>
+                          <button
+                            type="button"
+                            className="lock-button secondary"
+                            onClick={() => toggleHintChoices(mailboxId)}
+                          >
+                            Password Reminder
+                          </button>
+                        </div>
+                      </form>
+
+                      {passwordErrors[mailboxId] && (
+                        <div className="lock-error inline-error">
+                          {passwordErrors[mailboxId]}
+                        </div>
+                      )}
+
+                      {renderHintPanel(mailboxId)}
+                    </section>
+                  );
+                })}
+              </div>
+            )}
+
+            <div className="mailbox-shell">
+              <aside className="mailbox-sidebar">
+                <div className="panel-block">
+                  <div className="panel-label">Recovered Accounts</div>
+
+                  <div className="mailbox-account-list">
+                    {unlockedMailboxList.map((mailbox) => {
+                      const isActive = mailbox.id === selectedMailboxId;
 
                       return (
                         <button
-                          key={email.id}
+                          key={mailbox.id}
                           type="button"
-                          className={`message-row ${isActive ? "active" : ""} ${
-                            !email.read ? "unread" : ""
-                          } ${email.deleted ? "deleted" : ""}`}
-                          onClick={() => setSelectedEmailId(email.id)}
+                          className={`mailbox-account-button ${isActive ? "active" : ""}`}
+                          onClick={() => {
+                            setSelectedMailboxId(mailbox.id);
+                            setSelectedFolder("inbox");
+                          }}
                         >
-                          <div className="message-row-top">
-                            <span className="message-sender">{email.from}</span>
-                            <span className="message-time">
-                              {formatMailboxDate(email.timestamp)}
-                            </span>
-                          </div>
-
-                          <div className="message-subject-row">
-                            <span className="message-subject">{email.subject}</span>
-                          </div>
-
-                          <div className="message-preview">{email.preview}</div>
+                          <span className="account-owner">{mailbox.owner}</span>
+                          <span className="account-address">{mailbox.emailAddress}</span>
+                          <span className="account-status">{mailbox.recoveryStatus}</span>
                         </button>
                       );
-                    })
-                  )}
+                    })}
+                  </div>
                 </div>
-              </div>
-            </aside>
 
-            <article className="mailbox-reader-panel">
-              {selectedEmail ? (
-                <>
-                  <div className="panel-header reader-header">
+                <div className="panel-block">
+                  <div className="panel-label">Folders</div>
+
+                  <div className="folder-list">
+                    {availableFolders.map((folder) => {
+                      const isActive = folder === selectedFolder;
+
+                      return (
+                        <button
+                          key={folder}
+                          type="button"
+                          className={`folder-button ${isActive ? "active" : ""}`}
+                          onClick={() => setSelectedFolder(folder)}
+                        >
+                          <span>{FOLDER_LABELS[folder] || folder}</span>
+                          <span className="folder-count">{folderCounts[folder] || 0}</span>
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                <div className="mailbox-list-panel">
+                  <div className="panel-header">
                     <div>
-                      <div className="panel-label">Recovered Message</div>
-                      <h3 className="reader-subject">{selectedEmail.subject}</h3>
+                      <div className="panel-label">Mailbox</div>
+                      <div className="panel-title-text">{selectedMailbox?.emailAddress}</div>
                     </div>
-
-                    <div className="reader-meta-chip">{selectedEmail.id}</div>
-                  </div>
-
-                  <div className="reader-meta">
-                    <div className="meta-row">
-                      <span className="meta-label">From</span>
-                      <span className="meta-value">{selectedEmail.from}</span>
-                    </div>
-                    <div className="meta-row">
-                      <span className="meta-label">To</span>
-                      <span className="meta-value">{selectedEmail.to}</span>
-                    </div>
-                    <div className="meta-row">
-                      <span className="meta-label">Date</span>
-                      <span className="meta-value">
-                        {formatMailboxDate(selectedEmail.timestamp)}
-                      </span>
-                    </div>
-                    <div className="meta-row">
-                      <span className="meta-label">Folder</span>
-                      <span className="meta-value">
-                        {FOLDER_LABELS[selectedEmail.folder] || selectedEmail.folder}
-                        {selectedEmail.deleted ? " / Deleted Item" : ""}
-                      </span>
+                    <div className="panel-folder-chip">
+                      {FOLDER_LABELS[selectedFolder] || selectedFolder}
                     </div>
                   </div>
 
-                  <div className="reader-body">
-                    {selectedEmail.body.split("\n").map((line, index) => (
-                      <p key={`${selectedEmail.id}-${index}`}>{line || "\u00A0"}</p>
-                    ))}
+                  <div className="message-list">
+                    {currentEmails.length === 0 ? (
+                      <div className="empty-state">
+                        No recoverable messages found in this folder.
+                      </div>
+                    ) : (
+                      currentEmails.map((email) => {
+                        const isActive = selectedEmail?.id === email.id;
+
+                        return (
+                          <button
+                            key={email.id}
+                            type="button"
+                            className={`message-row ${isActive ? "active" : ""} ${
+                              !email.read ? "unread" : ""
+                            } ${email.deleted ? "deleted" : ""}`}
+                            onClick={() => setSelectedEmailId(email.id)}
+                          >
+                            <div className="message-row-top">
+                              <span className="message-sender">{email.from}</span>
+                              <span className="message-time">
+                                {formatMailboxDate(email.timestamp)}
+                              </span>
+                            </div>
+
+                            <div className="message-subject-row">
+                              <span className="message-subject">{email.subject}</span>
+                            </div>
+
+                            <div className="message-preview">{email.preview}</div>
+                          </button>
+                        );
+                      })
+                    )}
                   </div>
-                </>
-              ) : (
-                <div className="empty-state">No message selected.</div>
-              )}
-            </article>
+                </div>
+              </aside>
+
+              <article className="mailbox-reader-panel">
+                {selectedEmail ? (
+                  <>
+                    <div className="panel-header reader-header">
+                      <div>
+                        <div className="panel-label">Recovered Message</div>
+                        <h3 className="reader-subject">{selectedEmail.subject}</h3>
+                      </div>
+
+                      <div className="reader-meta-chip">{selectedEmail.id}</div>
+                    </div>
+
+                    <div className="reader-meta">
+                      <div className="meta-row">
+                        <span className="meta-label">From</span>
+                        <span className="meta-value">{selectedEmail.from}</span>
+                      </div>
+                      <div className="meta-row">
+                        <span className="meta-label">To</span>
+                        <span className="meta-value">{selectedEmail.to}</span>
+                      </div>
+                      <div className="meta-row">
+                        <span className="meta-label">Date</span>
+                        <span className="meta-value">
+                          {formatMailboxDate(selectedEmail.timestamp)}
+                        </span>
+                      </div>
+                      <div className="meta-row">
+                        <span className="meta-label">Folder</span>
+                        <span className="meta-value">
+                          {FOLDER_LABELS[selectedEmail.folder] || selectedEmail.folder}
+                          {selectedEmail.deleted ? " / Deleted Item" : ""}
+                        </span>
+                      </div>
+                    </div>
+
+                    <div className="reader-body">
+                      {selectedEmail.body.split("\n").map((line, index) => (
+                        <p key={`${selectedEmail.id}-${index}`}>{line || "\u00A0"}</p>
+                      ))}
+                    </div>
+                  </>
+                ) : (
+                  <div className="empty-state">No message selected.</div>
+                )}
+              </article>
+            </div>
+          </>
+        )}
+      </section>
+
+      {overlayImage && (
+        <div className="profile-overlay" onClick={() => setOverlayImage(null)}>
+          <div
+            className="profile-overlay-inner"
+            onClick={(event) => event.stopPropagation()}
+          >
+            <button
+              type="button"
+              className="profile-overlay-close"
+              onClick={() => setOverlayImage(null)}
+            >
+              Close
+            </button>
+
+            <img
+              src={overlayImage.src}
+              alt={overlayImage.alt}
+              className="profile-overlay-image"
+            />
           </div>
-        </>
+        </div>
       )}
-    </section>
+    </>
   );
 }
