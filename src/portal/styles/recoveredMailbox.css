@@ -351,7 +351,7 @@
 
 .lock-card-grid {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: 1fr;
   gap: 18px;
 }
 
@@ -649,5 +649,35 @@
   display: block;
   width: 100%;
   height: auto;
+}
+
+.recovered-profile-fallback {
+  padding: 18px;
+  font-size: 13px;
+  color: rgba(252, 165, 165, 0.9);
+  background: rgba(248, 113, 113, 0.06);
+}
+
+.recovered-profile-panel {
+  padding: 16px;
+}
+
+.recovered-profile-image-wrap.large {
+  margin-top: 12px;
+  border: 1px solid rgba(121, 174, 232, 0.16);
+  border-radius: 16px;
+  overflow: hidden;
+  background: rgba(3, 9, 17, 0.92);
+  max-width: 100%;
+}
+
+.recovered-profile-image.large {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.lock-hint-box {
+  overflow: visible;
 }
 }

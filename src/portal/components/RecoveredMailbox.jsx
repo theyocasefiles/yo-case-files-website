@@ -25,26 +25,6 @@ const INSTAGRAM_HINTS = {
     "The password appears to reference branding language used in the public profile bio. Review Daniel Kovacs’s profile header carefully.",
 };
 
-const RECOVERED_PROFILES = {
-  "sara-malik": {
-    title: "Recovered Social Profile — Sara Malik",
-    handle: "@sara.malik",
-    profileType: "Recovered public-facing profile capture",
-    bio: "soft light / late edits / quiet nights",
-    detailLabel: "Relevant recovered post caption",
-    detailText:
-      "Not everything needs to be said out loud. Some things survive better as little secrets.",
-  },
-  "daniel-kovacs": {
-    title: "Recovered Social Profile — Daniel Kovacs",
-    handle: "@danielkovacs",
-    profileType: "Recovered public-facing profile capture",
-    bio: "Control the narrative. Protect the brand.",
-    detailLabel: "Relevant recovered profile bio",
-    detailText: "Control the narrative. Protect the brand.",
-  },
-};
-
 export default function RecoveredMailbox() {
   const [unlockedMailboxes, setUnlockedMailboxes] = useState({
     "sara-malik": false,
@@ -194,11 +174,6 @@ export default function RecoveredMailbox() {
       ...prev,
       [mailboxId]: !prev[mailboxId],
     }));
-
-    setHintMode((prev) => ({
-      ...prev,
-      [mailboxId]: prev[mailboxId],
-    }));
   }
 
   function openHintMode(mailboxId, mode) {
@@ -249,25 +224,27 @@ export default function RecoveredMailbox() {
 
         {mode === "recovered" && (
           <div className="hint-mode-panel recovered-profile-panel">
-            <div className="panel-label">{RECOVERED_PROFILES[mailboxId].profileType}</div>
-            <div className="recovered-profile-title">{RECOVERED_PROFILES[mailboxId].title}</div>
-            <div className="recovered-profile-handle">{RECOVERED_PROFILES[mailboxId].handle}</div>
+            <div className="panel-label">Recovered public-facing profile capture</div>
 
-            <div className="recovered-profile-block">
-              <div className="recovered-profile-label">Bio</div>
-              <div className="recovered-profile-text">
-                {RECOVERED_PROFILES[mailboxId].bio}
+            {mailboxId === "sara-malik" && (
+              <div className="recovered-profile-image-wrap large">
+                <img
+                  src="/evidence/recovered-profile-sara.png"
+                  alt="Recovered Sara Malik social profile capture"
+                  className="recovered-profile-image large"
+                />
               </div>
-            </div>
+            )}
 
-            <div className="recovered-profile-block">
-              <div className="recovered-profile-label">
-                {RECOVERED_PROFILES[mailboxId].detailLabel}
+            {mailboxId === "daniel-kovacs" && (
+              <div className="recovered-profile-image-wrap large">
+                <img
+                  src="/evidence/recovered-profile-daniel.png"
+                  alt="Recovered Daniel Kovacs social profile capture"
+                  className="recovered-profile-image large"
+                />
               </div>
-              <div className="recovered-profile-text">
-                {RECOVERED_PROFILES[mailboxId].detailText}
-              </div>
-            </div>
+            )}
           </div>
         )}
       </div>
@@ -321,15 +298,11 @@ export default function RecoveredMailbox() {
                     <div>
                       <div className="panel-label">Recovered Account</div>
                       <h4 className="lock-card-title">{mailbox.owner}</h4>
-                      <div className="lock-card-address">
-                        {mailbox.emailAddress}
-                      </div>
+                      <div className="lock-card-address">{mailbox.emailAddress}</div>
                     </div>
 
                     <div
-                      className={`lock-status-chip ${
-                        isUnlocked ? "unlocked" : "locked"
-                      }`}
+                      className={`lock-status-chip ${isUnlocked ? "unlocked" : "locked"}`}
                     >
                       {isUnlocked ? "Unlocked" : "Locked"}
                     </div>
@@ -345,10 +318,7 @@ export default function RecoveredMailbox() {
                       onSubmit={(event) => handlePasswordSubmit(event, mailboxId)}
                       className="lock-form"
                     >
-                      <label
-                        className="lock-label"
-                        htmlFor={`password-${mailboxId}`}
-                      >
+                      <label className="lock-label" htmlFor={`password-${mailboxId}`}>
                         Mailbox Password
                       </label>
 
@@ -365,9 +335,7 @@ export default function RecoveredMailbox() {
                       />
 
                       {passwordErrors[mailboxId] && (
-                        <div className="lock-error">
-                          {passwordErrors[mailboxId]}
-                        </div>
+                        <div className="lock-error">{passwordErrors[mailboxId]}</div>
                       )}
 
                       <div className="lock-actions">
@@ -488,21 +456,15 @@ export default function RecoveredMailbox() {
                       <button
                         key={mailbox.id}
                         type="button"
-                        className={`mailbox-account-button ${
-                          isActive ? "active" : ""
-                        }`}
+                        className={`mailbox-account-button ${isActive ? "active" : ""}`}
                         onClick={() => {
                           setSelectedMailboxId(mailbox.id);
                           setSelectedFolder("inbox");
                         }}
                       >
                         <span className="account-owner">{mailbox.owner}</span>
-                        <span className="account-address">
-                          {mailbox.emailAddress}
-                        </span>
-                        <span className="account-status">
-                          {mailbox.recoveryStatus}
-                        </span>
+                        <span className="account-address">{mailbox.emailAddress}</span>
+                        <span className="account-status">{mailbox.recoveryStatus}</span>
                       </button>
                     );
                   })}
@@ -524,9 +486,7 @@ export default function RecoveredMailbox() {
                         onClick={() => setSelectedFolder(folder)}
                       >
                         <span>{FOLDER_LABELS[folder] || folder}</span>
-                        <span className="folder-count">
-                          {folderCounts[folder] || 0}
-                        </span>
+                        <span className="folder-count">{folderCounts[folder] || 0}</span>
                       </button>
                     );
                   })}
@@ -537,9 +497,7 @@ export default function RecoveredMailbox() {
                 <div className="panel-header">
                   <div>
                     <div className="panel-label">Mailbox</div>
-                    <div className="panel-title-text">
-                      {selectedMailbox?.emailAddress}
-                    </div>
+                    <div className="panel-title-text">{selectedMailbox?.emailAddress}</div>
                   </div>
                   <div className="panel-folder-chip">
                     {FOLDER_LABELS[selectedFolder] || selectedFolder}
@@ -572,9 +530,7 @@ export default function RecoveredMailbox() {
                           </div>
 
                           <div className="message-subject-row">
-                            <span className="message-subject">
-                              {email.subject}
-                            </span>
+                            <span className="message-subject">{email.subject}</span>
                           </div>
 
                           <div className="message-preview">{email.preview}</div>
@@ -592,9 +548,7 @@ export default function RecoveredMailbox() {
                   <div className="panel-header reader-header">
                     <div>
                       <div className="panel-label">Recovered Message</div>
-                      <h3 className="reader-subject">
-                        {selectedEmail.subject}
-                      </h3>
+                      <h3 className="reader-subject">{selectedEmail.subject}</h3>
                     </div>
 
                     <div className="reader-meta-chip">{selectedEmail.id}</div>
@@ -618,8 +572,7 @@ export default function RecoveredMailbox() {
                     <div className="meta-row">
                       <span className="meta-label">Folder</span>
                       <span className="meta-value">
-                        {FOLDER_LABELS[selectedEmail.folder] ||
-                          selectedEmail.folder}
+                        {FOLDER_LABELS[selectedEmail.folder] || selectedEmail.folder}
                         {selectedEmail.deleted ? " / Deleted Item" : ""}
                       </span>
                     </div>
@@ -627,9 +580,7 @@ export default function RecoveredMailbox() {
 
                   <div className="reader-body">
                     {selectedEmail.body.split("\n").map((line, index) => (
-                      <p key={`${selectedEmail.id}-${index}`}>
-                        {line || "\u00A0"}
-                      </p>
+                      <p key={`${selectedEmail.id}-${index}`}>{line || "\u00A0"}</p>
                     ))}
                   </div>
                 </>
