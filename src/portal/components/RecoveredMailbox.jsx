@@ -18,11 +18,31 @@ const MAILBOX_PASSWORDS = {
   "daniel-kovacs": "narrative",
 };
 
-const MAILBOX_HINTS = {
+const INSTAGRAM_HINTS = {
   "sara-malik":
     "The password appears to reference wording used in a recent public caption. Review Sara Malik’s posts carefully. One entry suggests that some things are better kept unspoken.",
   "daniel-kovacs":
     "The password appears to reference branding language used in the public profile bio. Review Daniel Kovacs’s profile header carefully.",
+};
+
+const RECOVERED_PROFILES = {
+  "sara-malik": {
+    title: "Recovered Social Profile — Sara Malik",
+    handle: "@sara.malik",
+    profileType: "Recovered public-facing profile capture",
+    bio: "soft light / late edits / quiet nights",
+    detailLabel: "Relevant recovered post caption",
+    detailText:
+      "Not everything needs to be said out loud. Some things survive better as little secrets.",
+  },
+  "daniel-kovacs": {
+    title: "Recovered Social Profile — Daniel Kovacs",
+    handle: "@danielkovacs",
+    profileType: "Recovered public-facing profile capture",
+    bio: "Control the narrative. Protect the brand.",
+    detailLabel: "Relevant recovered profile bio",
+    detailText: "Control the narrative. Protect the brand.",
+  },
 };
 
 export default function RecoveredMailbox() {
@@ -41,7 +61,12 @@ export default function RecoveredMailbox() {
     "daniel-kovacs": "",
   });
 
-  const [showHints, setShowHints] = useState({
+  const [hintMode, setHintMode] = useState({
+    "sara-malik": null,
+    "daniel-kovacs": null,
+  });
+
+  const [showHintChoices, setShowHintChoices] = useState({
     "sara-malik": false,
     "daniel-kovacs": false,
   });
@@ -159,16 +184,94 @@ export default function RecoveredMailbox() {
     }));
   }
 
-  function handleHintToggle(mailboxId) {
-    setShowHints((prev) => ({
-      ...prev,
-      [mailboxId]: !prev[mailboxId],
-    }));
-  }
-
   function handlePasswordSubmit(event, mailboxId) {
     event.preventDefault();
     handleUnlock(mailboxId);
+  }
+
+  function toggleHintChoices(mailboxId) {
+    setShowHintChoices((prev) => ({
+      ...prev,
+      [mailboxId]: !prev[mailboxId],
+    }));
+
+    setHintMode((prev) => ({
+      ...prev,
+      [mailboxId]: prev[mailboxId],
+    }));
+  }
+
+  function openHintMode(mailboxId, mode) {
+    setShowHintChoices((prev) => ({
+      ...prev,
+      [mailboxId]: true,
+    }));
+
+    setHintMode((prev) => ({
+      ...prev,
+      [mailboxId]: mode,
+    }));
+  }
+
+  function renderHintPanel(mailboxId) {
+    if (!showHintChoices[mailboxId]) return null;
+
+    const mode = hintMode[mailboxId];
+
+    return (
+      <div className="lock-hint-box">
+        <div className="panel-label">Password Reminder Options</div>
+
+        <div className="hint-option-actions">
+          <button
+            type="button"
+            className={`lock-button secondary ${mode === "instagram" ? "active-hint-mode" : ""}`}
+            onClick={() => openHintMode(mailboxId, "instagram")}
+          >
+            Instagram clue
+          </button>
+
+          <button
+            type="button"
+            className={`lock-button secondary ${mode === "recovered" ? "active-hint-mode" : ""}`}
+            onClick={() => openHintMode(mailboxId, "recovered")}
+          >
+            No Instagram? Recovered profile copy
+          </button>
+        </div>
+
+        {mode === "instagram" && (
+          <div className="hint-mode-panel">
+            <div className="panel-label">Instagram Clue</div>
+            <p>{INSTAGRAM_HINTS[mailboxId]}</p>
+          </div>
+        )}
+
+        {mode === "recovered" && (
+          <div className="hint-mode-panel recovered-profile-panel">
+            <div className="panel-label">{RECOVERED_PROFILES[mailboxId].profileType}</div>
+            <div className="recovered-profile-title">{RECOVERED_PROFILES[mailboxId].title}</div>
+            <div className="recovered-profile-handle">{RECOVERED_PROFILES[mailboxId].handle}</div>
+
+            <div className="recovered-profile-block">
+              <div className="recovered-profile-label">Bio</div>
+              <div className="recovered-profile-text">
+                {RECOVERED_PROFILES[mailboxId].bio}
+              </div>
+            </div>
+
+            <div className="recovered-profile-block">
+              <div className="recovered-profile-label">
+                {RECOVERED_PROFILES[mailboxId].detailLabel}
+              </div>
+              <div className="recovered-profile-text">
+                {RECOVERED_PROFILES[mailboxId].detailText}
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+    );
   }
 
   const allLocked = unlockedMailboxList.length === 0;
@@ -275,19 +378,14 @@ export default function RecoveredMailbox() {
                         <button
                           type="button"
                           className="lock-button secondary"
-                          onClick={() => handleHintToggle(mailboxId)}
+                          onClick={() => toggleHintChoices(mailboxId)}
                         >
                           Password Reminder
                         </button>
                       </div>
                     </form>
 
-                    {showHints[mailboxId] && (
-                      <div className="lock-hint-box">
-                        <div className="panel-label">DCCU Credential Note</div>
-                        <p>{MAILBOX_HINTS[mailboxId]}</p>
-                      </div>
-                    )}
+                    {renderHintPanel(mailboxId)}
                   </div>
                 </section>
               );
@@ -312,12 +410,7 @@ export default function RecoveredMailbox() {
                   key={mailbox.id}
                   type="button"
                   className="inline-unlock-chip"
-                  onClick={() => {
-                    setShowHints((prev) => ({
-                      ...prev,
-                      [mailbox.id]: true,
-                    }));
-                  }}
+                  onClick={() => toggleHintChoices(mailbox.id)}
                 >
                   {mailbox.owner} still locked
                 </button>
@@ -362,7 +455,7 @@ export default function RecoveredMailbox() {
                         <button
                           type="button"
                           className="lock-button secondary"
-                          onClick={() => handleHintToggle(mailboxId)}
+                          onClick={() => toggleHintChoices(mailboxId)}
                         >
                           Password Reminder
                         </button>
@@ -375,12 +468,7 @@ export default function RecoveredMailbox() {
                       </div>
                     )}
 
-                    {showHints[mailboxId] && (
-                      <div className="lock-hint-box inline-hint">
-                        <div className="panel-label">DCCU Credential Note</div>
-                        <p>{MAILBOX_HINTS[mailboxId]}</p>
-                      </div>
-                    )}
+                    {renderHintPanel(mailboxId)}
                   </section>
                 );
               })}
