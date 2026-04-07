@@ -1083,14 +1083,30 @@ input {
   z-index: 1;
 }
 
-.modal-image,
-.modal-video {
+.modal-image {
   width: 100%;
   max-height: 68vh;
   object-fit: contain;
   display: block;
   border: 1px solid rgba(103, 157, 220, 0.22);
   background: #05090f;
+}
+
+.video-wrapper {
+  width: 100%;
+  max-width: 720px;
+  margin: 0 auto;
+}
+
+.portal-video {
+  width: 100%;
+  height: auto;
+  display: block;
+  background: #05090f;
+  border: 1px solid rgba(103, 157, 220, 0.18);
+  box-shadow: none;
+  transform: none;
+  filter: none;
 }
 
 .modal-footer {
@@ -1365,7 +1381,7 @@ input {
     line-height: 1.5;
   }
 
-  .modal-overlay {
+    .modal-overlay {
     padding: 0;
   }
 
@@ -1379,20 +1395,57 @@ input {
   .modal-panel::before {
     inset: 6px;
   }
+  
+  .video-modal-overlay {
+  backdrop-filter: none;
+}
+
+.video-modal-panel {
+  box-shadow:
+    0 0 0 1px rgba(50, 88, 132, 0.45),
+    0 0 24px rgba(0, 0, 0, 0.32);
+}
+
+.video-modal-panel::before {
+  display: none;
+}
 
   .modal-body {
-    padding: 12px;
-    max-height: calc(100vh - 155px);
+    padding: 8px;
+    max-height: calc(100vh - 145px);
   }
 
   .modal-footer {
-    padding: 0 12px 14px;
-    padding-top: 12px;
+    padding: 0 14px 18px;
+    padding-top: 14px;
   }
 
   .modal-title {
-    font-size: 0.95rem;
+    font-size: 1.05rem;
   }
+
+  .modal-subtitle {
+    font-size: 0.88rem;
+    line-height: 1.4;
+  }
+
+  .modal-evidence-id {
+    font-size: 0.95rem;
+    margin-bottom: 10px;
+  }
+
+  .modal-footer p {
+    font-size: 1rem;
+    line-height: 1.8;
+  }
+
+  .modal-image {
+  max-height: 74vh;
+}
+
+.portal-video {
+  max-height: 74vh;
+}
 
   .modal-close {
     width: 40px;

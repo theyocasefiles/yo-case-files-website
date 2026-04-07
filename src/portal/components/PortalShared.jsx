@@ -45,9 +45,17 @@ export function EvidenceListItem({ item, onOpen, index }) {
 }
 
 export function EvidenceModal({ evidence, onClose }) {
+  const isVideo = evidence.type === "video";
+
   return (
-    <div className="modal-overlay" onClick={onClose}>
-      <div className="modal-panel" onClick={(e) => e.stopPropagation()}>
+    <div
+      className={`modal-overlay ${isVideo ? "video-modal-overlay" : ""}`}
+      onClick={onClose}
+    >
+      <div
+        className={`modal-panel ${isVideo ? "video-modal-panel" : ""}`}
+        onClick={(e) => e.stopPropagation()}
+      >
         <div className="modal-header">
           <div className="header-left">
             <img src="/logo.png" alt="DCCU Logo" className="modal-logo" />
@@ -64,13 +72,15 @@ export function EvidenceModal({ evidence, onClose }) {
         </div>
 
         <div className="modal-body">
-          {evidence.type === "image" ? (
-            <img src={evidence.file} alt={evidence.title} className="modal-image" />
+          {isVideo ? (
+            <div className="video-wrapper">
+              <video controls playsInline preload="metadata" className="portal-video">
+                <source src={evidence.file} type="video/mp4" />
+                Your browser does not support video playback.
+              </video>
+            </div>
           ) : (
-            <video controls className="modal-video">
-              <source src={evidence.file} type="video/mp4" />
-              Your browser does not support video playback.
-            </video>
+            <img src={evidence.file} alt={evidence.title} className="modal-image" />
           )}
         </div>
 
