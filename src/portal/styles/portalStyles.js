@@ -1004,6 +1004,11 @@ input {
   backdrop-filter: blur(3px);
 }
 
+.video-modal-overlay {
+  backdrop-filter: none;
+  background: rgba(2, 7, 14, 0.94);
+}
+
 .modal-panel {
   width: min(1180px, 100%);
   max-height: 90vh;
@@ -1018,12 +1023,24 @@ input {
   position: relative;
 }
 
+.video-modal-panel {
+  box-shadow:
+    0 0 0 1px rgba(50, 88, 132, 0.45),
+    0 0 24px rgba(0, 0, 0, 0.32);
+  border: 1px solid rgba(117, 171, 235, 0.18);
+  background: #07111d;
+}
+
 .modal-panel::before {
   content: "";
   position: absolute;
   inset: 10px;
   border: 1px solid rgba(103, 157, 220, 0.14);
   pointer-events: none;
+}
+
+.video-modal-panel::before {
+  display: none;
 }
 
 .modal-header {
@@ -1037,6 +1054,18 @@ input {
     linear-gradient(180deg, rgba(20, 45, 72, 0.96), rgba(13, 28, 44, 0.96));
   position: relative;
   z-index: 1;
+}
+
+.video-modal-panel .modal-header {
+  padding: 12px 16px;
+}
+
+.video-modal-panel .modal-logo {
+  display: none;
+}
+
+.video-modal-panel .modal-footer {
+  border-top: none;
 }
 
 .modal-title {
@@ -1094,7 +1123,7 @@ input {
 
 .video-wrapper {
   width: 100%;
-  max-width: 720px;
+  max-width: 960px;
   margin: 0 auto;
 }
 
@@ -1102,8 +1131,8 @@ input {
   width: 100%;
   height: auto;
   display: block;
-  background: #05090f;
-  border: 1px solid rgba(103, 157, 220, 0.18);
+  background: #000;
+  border: none;
   box-shadow: none;
   transform: none;
   filter: none;
@@ -1216,11 +1245,11 @@ input {
   }
 
   .panel-logo.login-header-logo {
-  width: 72px;
-  height: 72px;
-  left: 14px;
-  top: calc(50% - 36px);
-}
+    width: 72px;
+    height: 72px;
+    left: 14px;
+    top: calc(50% - 36px);
+  }
 
   .header-left {
     gap: 10px;
@@ -1381,7 +1410,7 @@ input {
     line-height: 1.5;
   }
 
-    .modal-overlay {
+  .modal-overlay {
     padding: 0;
   }
 
@@ -1395,20 +1424,6 @@ input {
   .modal-panel::before {
     inset: 6px;
   }
-  
-  .video-modal-overlay {
-  backdrop-filter: none;
-}
-
-.video-modal-panel {
-  box-shadow:
-    0 0 0 1px rgba(50, 88, 132, 0.45),
-    0 0 24px rgba(0, 0, 0, 0.32);
-}
-
-.video-modal-panel::before {
-  display: none;
-}
 
   .modal-body {
     padding: 8px;
@@ -1440,12 +1455,12 @@ input {
   }
 
   .modal-image {
-  max-height: 74vh;
-}
+    max-height: 74vh;
+  }
 
-.portal-video {
-  max-height: 74vh;
-}
+  .portal-video {
+    max-height: 74vh;
+  }
 
   .modal-close {
     width: 40px;
