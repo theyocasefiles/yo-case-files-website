@@ -16,7 +16,7 @@ export default function PortalLogin() {
     const cleanUser = username.trim().toLowerCase();
     const cleanPass = password.trim().toLowerCase();
 
-    if (cleanUser === "i.good" && cleanPass === "meridian1900") {
+    if (cleanUser === "i.good" && cleanPass === "meridian1915") {
       localStorage.setItem("yo_case_portal_access", "granted");
       setSystemMessage({
         type: "success",
