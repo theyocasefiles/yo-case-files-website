@@ -7,6 +7,28 @@ export const recoveredMailboxes = [
     folders: {
       inbox: [
         {
+          id: "E-08-R",
+          folder: "inbox",
+          from: "Daniel Kovacs <daniel.kovacs.management@outlook.com>",
+          to: "Sara Malik <s.malik.consulting@protonmail.com>",
+          subject: "Sample / tonight",
+          preview:
+            "Keep the sample with you until later. Don’t leave anything sitting out before the stream.",
+          timestamp: "2026-03-12T17:52:00",
+          read: false,
+          important: true,
+          deleted: false,
+          body: `Keep the sample with you until later.
+
+Don’t leave anything sitting out before the stream. If she asks again, tell her it’s the updated batch and nothing changed.
+
+I’ll be nearby this evening if needed.
+
+Delete this once you’ve read it.
+
+D`,
+        },
+        {
           id: "SM-01",
           folder: "inbox",
           from: "Lena Varga <lena.varga.media@gmail.com>",
@@ -198,18 +220,18 @@ City Cabs Chester`,
     folders: {
       inbox: [
         {
-  id: "DK-01",
-  folder: "inbox",
-  from: "Hidden Isles Wellness <orders@hiddenisleswellness.net>",
-  to: "Daniel Kovacs <daniel.kovacs.management@outlook.com>",
-  subject: "Order confirmation HI-44381",
-  preview:
-    "Your order has been processed successfully. Dispatch confirmation will follow separately.",
-  timestamp: "2026-03-09T11:06:00",
-  read: false,
-  important: true,
-  deleted: false,
-  body: `Thank you for your order.
+          id: "DK-01",
+          folder: "inbox",
+          from: "Hidden Isles Wellness <orders@hiddenisleswellness.net>",
+          to: "Daniel Kovacs <daniel.kovacs.management@outlook.com>",
+          subject: "Order confirmation HI-44381",
+          preview:
+            "Your order has been processed successfully. Dispatch confirmation will follow separately.",
+          timestamp: "2026-03-09T11:06:00",
+          read: false,
+          important: true,
+          deleted: false,
+          body: `Thank you for your order.
 
 Your purchase under reference HI-44381 has been successfully processed and is now awaiting dispatch.
 
@@ -227,7 +249,27 @@ Delivery option selected:
 A dispatch confirmation will be issued once the parcel has entered transit.
 
 Thank you for shopping with Hidden Isles Wellness.`,
-},
+        },
+        {
+          id: "DK-02",
+          folder: "inbox",
+          from: "Northshore Private Invest <accounts@northshoreprivateinvest.co.uk>",
+          to: "Daniel Kovacs <daniel.kovacs.management@outlook.com>",
+          subject: "Outstanding balance reminder",
+          preview:
+            "We require settlement of the overdue balance within 5 working days to avoid escalation.",
+          timestamp: "2026-03-10T08:32:00",
+          read: true,
+          important: false,
+          deleted: false,
+          body: `Dear Mr Kovacs,
+
+We require settlement of the overdue amount within 5 working days.
+
+Please arrange payment to avoid escalation.
+
+Accounts Team`,
+        },
         {
           id: "DK-03",
           folder: "inbox",
@@ -252,6 +294,28 @@ Elevate Management`,
       ],
       sent: [
         {
+          id: "E-08",
+          folder: "sent",
+          from: "Daniel Kovacs <daniel.kovacs.management@outlook.com>",
+          to: "Sara Malik <s.malik.consulting@protonmail.com>",
+          subject: "Sample / tonight",
+          preview:
+            "Keep the sample with you until later. Don’t leave anything sitting out before the stream.",
+          timestamp: "2026-03-12T17:52:00",
+          read: true,
+          important: true,
+          deleted: false,
+          body: `Keep the sample with you until later.
+
+Don’t leave anything sitting out before the stream. If she asks again, tell her it’s the updated batch and nothing changed.
+
+I’ll be nearby this evening if needed.
+
+Delete this once you’ve read it.
+
+D`,
+        },
+        {
           id: "DK-04",
           folder: "sent",
           from: "Daniel Kovacs <daniel.kovacs.management@outlook.com>",
@@ -274,18 +338,18 @@ Let me handle the rest.
 D`,
         },
         {
-  id: "DK-05",
-  folder: "sent",
-  from: "Daniel Kovacs <daniel.kovacs.management@outlook.com>",
-  to: "Hidden Isles Wellness <orders@hiddeniswellness.net>",
-  subject: "Re: Order HI-44381",
-  preview:
-    "Need discreet packaging. No branded inserts. Confirm no signature is required.",
-  timestamp: "2026-03-09T11:22:00",
-  read: true,
-  important: true,
-  deleted: false,
-  body: `Thanks.
+          id: "DK-05",
+          folder: "sent",
+          from: "Daniel Kovacs <daniel.kovacs.management@outlook.com>",
+          to: "Hidden Isles Wellness <orders@hiddenisleswellness.net>",
+          subject: "Re: Order HI-44381",
+          preview:
+            "Need discreet packaging. No branded inserts. Confirm no signature is required.",
+          timestamp: "2026-03-09T11:22:00",
+          read: true,
+          important: true,
+          deleted: false,
+          body: `Thanks.
 
 Need discreet packaging. No branded inserts, no promotional paperwork inside the parcel, and ideally no signature required at delivery.
 
@@ -294,7 +358,7 @@ If possible, keep description generic on any external label.
 Confirm once arranged.
 
 Daniel`,
-},
+        },
       ],
       archive: [
         {
