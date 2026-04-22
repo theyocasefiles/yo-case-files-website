@@ -19,7 +19,7 @@ export default function BriefingVideoPage() {
           </div>
 
           <div className="mt-5 flex justify-center">
-            <div className="w-full overflow-hidden bg-black md:max-w-[380px] md:rounded-[1.25rem] md:border md:border-white/10">
+            <div className="w-full overflow-hidden bg-black md:max-w-[320px] md:rounded-[1.25rem] md:border md:border-white/10">
               <video
                 className="block h-auto w-full"
                 controls
