@@ -4,6 +4,7 @@ import { useLocation, Routes, Route } from "react-router-dom";
 import HomePage from "./pages/HomePage";
 import BriefingPage from "./pages/BriefingPage";
 import BriefingVideoPage from "./pages/BriefingVideoPage";
+import Case001ArchivePage from "./pages/Case001ArchivePage";
 import PrivacyPage from "./pages/PrivacyPage";
 import TermsPage from "./pages/TermsPage";
 
@@ -43,6 +44,8 @@ export default function App() {
             </ProtectedPortal>
           }
         />
+
+        <Route path="/case-001-archive" element={<Case001ArchivePage />} />
 
         <Route path="/privacy" element={<PrivacyPage />} />
         <Route path="/terms" element={<TermsPage />} />
