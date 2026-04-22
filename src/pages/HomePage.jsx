@@ -26,8 +26,8 @@ export default function HomePage() {
       <main>
         <Hero />
         <Intro />
-        <HowItWorks />
         <Case001 />
+        <HowItWorks />
         <Detectives />
         <FAQ />
       </main>

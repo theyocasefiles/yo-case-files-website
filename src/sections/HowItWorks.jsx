@@ -11,7 +11,7 @@ export default function HowItWorks() {
       <SectionHeading
         eyebrow="How the Investigation Works"
         title="From case file to final accusation"
-        text="Clear to begin, layered to solve. The structure is simple. The truth is not."
+        text="Simple to begin, layered to solve. Review the evidence, follow the digital trail, and build your conclusion carefully."
       />
 
       <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-4">

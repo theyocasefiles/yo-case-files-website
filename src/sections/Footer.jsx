@@ -1,6 +1,7 @@
 import { useMemo } from "react";
 import { Mail } from "lucide-react";
 import WaitlistForm from "../components/WaitlistForm";
+import { storeConfig } from "../data/storeConfig";
 
 const socialLinks = [
   {
@@ -15,7 +16,7 @@ const socialLinks = [
   },
   {
     label: "Email",
-    href: "mailto:detective.good@TheYoCaseFiles.com",
+    href: "mailto:hello@theyocasefiles.com",
     icon: "mail",
   },
 ];
@@ -116,8 +117,58 @@ function FooterLinkColumn({ title, links }) {
   );
 }
 
+function getLaunchCard(config) {
+  switch (config.status) {
+    case "preorder":
+      return {
+        eyebrow: "Case 001 Pre-Orders",
+        title: "Secure your copy",
+        text: "Pre-orders are now open for Case 001. Reserve your investigation and be first in line when dispatch begins.",
+        showWaitlist: false,
+        actionLabel: config.cta.preorder,
+        actionHref: config.checkoutUrl,
+        disabled: false,
+      };
+
+    case "live":
+      return {
+        eyebrow: "Case 001 Available Now",
+        title: "Start the investigation",
+        text: "Case 001 is now available. Order your copy and step into a premium physical + digital detective experience.",
+        showWaitlist: false,
+        actionLabel: config.cta.live,
+        actionHref: config.checkoutUrl,
+        disabled: false,
+      };
+
+    case "sold-out":
+      return {
+        eyebrow: "Case 001 Sold Out",
+        title: "Stay on the case list",
+        text: "Case 001 is currently sold out. Join the waitlist to hear when stock returns and future cases are released.",
+        showWaitlist: true,
+        actionLabel: config.cta.soldOut,
+        actionHref: "#footer",
+        disabled: true,
+      };
+
+    case "coming-soon":
+    default:
+      return {
+        eyebrow: "Case 001 Launch Access",
+        title: "Stay close to the investigation",
+        text: "Get launch updates, case release news, early access information, and future investigation briefings.",
+        showWaitlist: true,
+        actionLabel: config.cta.comingSoon,
+        actionHref: "#footer",
+        disabled: false,
+      };
+  }
+}
+
 export default function Footer() {
   const year = useMemo(() => new Date().getFullYear(), []);
+  const launchCard = getLaunchCard(storeConfig);
 
   return (
     <footer
@@ -157,37 +208,45 @@ export default function Footer() {
 
         <div className="rounded-[2rem] border border-[#2b2e34] bg-[#111318]/85 p-6 backdrop-blur-sm">
           <p className="text-sm font-semibold uppercase tracking-[0.25em] text-[#c6a96b]">
-            Contact
+            {launchCard.eyebrow}
           </p>
 
           <h4 className="mt-3 text-2xl font-semibold text-[#f5efe4]">
-            Get in touch
+            {launchCard.title}
           </h4>
 
-          <p className="mt-4 leading-7 text-[#a9adb7]">
-            For general enquiries, support, collaborations, or press, contact
-            us below or follow the investigation on social media.
-          </p>
+          <p className="mt-4 leading-7 text-[#a9adb7]">{launchCard.text}</p>
 
           <a
-            href="mailto:detective.good@TheYoCaseFiles.com"
+            href="mailto:hello@theyocasefiles.com"
             className="mt-5 block break-all text-[#f5efe4] transition duration-300 hover:text-[#c6a96b]"
           >
-            detective.good@TheYoCaseFiles.com
+            hello@theyocasefiles.com
           </a>
 
-          <div className="mt-6">
-            <p className="text-sm font-semibold uppercase tracking-[0.2em] text-[#c6a96b]">
-              Join the Case List
-            </p>
-
-            <p className="mt-3 leading-7 text-[#a9adb7]">
-              Get launch updates, new case drops, early access news, and future
-              investigation briefings.
-            </p>
-
-            <WaitlistForm />
+          <div className="mt-4 text-sm leading-6 text-[#aeb6c1]">
+            <p>Secure checkout powered by Shopify.</p>
           </div>
+
+          {launchCard.showWaitlist ? (
+            <div className="mt-6">
+              <WaitlistForm />
+            </div>
+          ) : (
+            <div className="mt-6">
+              <a
+                href={launchCard.actionHref}
+                className={`inline-flex min-w-[190px] items-center justify-center rounded-2xl border border-[#d4b473] bg-[#c6a96b] px-6 py-3 text-sm font-semibold text-[#121317] shadow-[0_0_30px_rgba(198,169,107,0.18)] transition duration-300 ${
+                  launchCard.disabled
+                    ? "cursor-not-allowed opacity-60"
+                    : "hover:-translate-y-0.5 hover:bg-[#d4b473]"
+                }`}
+                aria-disabled={launchCard.disabled}
+              >
+                {launchCard.actionLabel}
+              </a>
+            </div>
+          )}
         </div>
       </div>
 

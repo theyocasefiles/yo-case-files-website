@@ -20,16 +20,12 @@ export default function Detectives() {
               Files is built using genuine investigative thinking, official-style documents,
               and the kind of detail we always wanted to see in a case.
             </p>
-
-            <p className="mt-5 text-sm font-semibold uppercase tracking-[0.2em] text-[#c6a96b]">
-              Cases created by Detective Good &amp; Detective Swan
-            </p>
           </div>
 
           <div className="rounded-3xl border border-white/10 bg-white/5 p-3 shadow-[0_20px_60px_rgba(0,0,0,0.35)]">
             <img
               src="/images/about-team-triptych.png"
-              alt="Detective Good and Detective Swan, the team behind The Yo Case Files"
+              alt="The team behind The Yo Case Files"
               className="h-[320px] w-full rounded-[20px] bg-[#0b1220] object-contain md:h-[420px]"
             />
           </div>

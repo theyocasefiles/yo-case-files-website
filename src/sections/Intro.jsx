@@ -20,9 +20,10 @@ export default function Intro() {
           </h2>
 
           <p className="mt-5 text-base leading-7 text-[#a9adb7] md:text-lg">
-            The Yo Case Files goes beyond a typical mystery game. Every case is
-            built to feel structured, layered, and believable, with evidence
-            that pushes the investigation beyond the printed page.
+            The Yo Case Files goes beyond a typical mystery game. Each case is
+            built to feel structured, layered, and believable, with physical
+            evidence, digital discovery, and investigative logic that carries
+            the experience far beyond the printed page.
           </p>
         </motion.div>
 
@@ -35,10 +36,10 @@ export default function Intro() {
         >
           <div className="grid gap-4 sm:grid-cols-2">
             {[
-              "Physical evidence and printed case materials",
-              "Social media, messages, and hidden digital trails",
-              "Portal-based final reveal",
-              "Built with real investigative logic and atmosphere",
+              "Printed evidence, reports, and official-style case materials",
+              "Messages, digital clues, and hidden investigative trails",
+              "Portal-led discovery and a structured final resolution",
+              "Built with real detective influence and grounded case logic",
             ].map((item) => (
               <div
                 key={item}
