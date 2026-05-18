@@ -11,6 +11,7 @@ import TermsPage from "./pages/TermsPage";
 import PortalLogin from "./portal/pages/PortalLogin";
 import Case001Portal from "./portal/pages/Case001Portal";
 import ProtectedPortal from "./portal/components/ProtectedPortal";
+import AureliaHouseInternalSystem from "./pages/AureliaHouseInternalSystem";
 
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -36,6 +37,7 @@ export default function App() {
         <Route path="/briefing-video" element={<BriefingVideoPage />} />
 
         <Route path="/portal" element={<PortalLogin />} />
+        <Route path="/aureliahouse" element={<AureliaHouseInternalSystem />} />
         <Route
           path="/portal/case-001"
           element={
@@ -46,6 +48,7 @@ export default function App() {
         />
 
         <Route path="/case-001-archive" element={<Case001ArchivePage />} />
+        
 
         <Route path="/privacy" element={<PrivacyPage />} />
         <Route path="/terms" element={<TermsPage />} />
