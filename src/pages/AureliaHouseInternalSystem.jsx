@@ -1,43 +1,43 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
-  ShieldCheck,
-  Grid3X3,
-  CalendarDays,
-  Video,
-  DoorOpen,
-  Users,
-  Wrench,
   Archive,
-  Landmark,
-  Lock,
+  BadgeCheck,
+  Bell,
+  CalendarDays,
   CheckCircle2,
   ChevronRight,
-  Bell,
-  BadgeCheck,
-  KeyRound,
-  Server,
-  FileText,
-  Clock3,
   CircleDot,
-  AlertTriangle,
   ClipboardList,
+  Clock3,
+  DoorOpen,
   Eye,
   FileSearch,
+  FileText,
   Fingerprint,
   Gauge,
+  Grid3X3,
+  HelpCircle,
   History,
   Info,
+  KeyRound,
+  Landmark,
+  Lock,
   MapPin,
   PlayCircle,
-  Route,
+  Server,
   Settings2,
-  HelpCircle,
+  ShieldCheck,
+  Users,
+  Video,
+  Wrench,
 } from "lucide-react";
 
 const AURELIA_LOGO = "/aurelia/images/aurelia-round-logo.png";
 const HERO_IMAGE = "/aurelia/images/aurelia-reception-hero.jpg";
 const CREDENTIAL_IMAGE = "/aurelia/images/founder-credential-card.jpg";
 const SUITE_THREE_IMAGE = "/aurelia/images/suite-three-thumb.jpg";
+
+const STORAGE_KEY = "yo_case_files_mcu002_aurelia_state_v1";
 
 const moduleNav = [
   { id: "start", label: "Start Here", icon: Grid3X3 },
@@ -47,6 +47,17 @@ const moduleNav = [
   { id: "staff-access", label: "Staff Access", icon: Users },
   { id: "more", label: "More Records", icon: Archive },
 ];
+
+const moduleOrder = ["start", "bookings", "cctv", "suite-three", "staff-access", "more"];
+
+const nextStepCopy = {
+  start: { label: "Begin with Bookings", target: "bookings" },
+  bookings: { label: "Continue to CCTV", target: "cctv" },
+  cctv: { label: "Continue to Suite Three", target: "suite-three" },
+  "suite-three": { label: "Continue to Staff Access", target: "staff-access" },
+  "staff-access": { label: "Continue to More Records", target: "more" },
+  more: { label: "Return to Start Here", target: "start" },
+};
 
 const investigationSteps = [
   {
@@ -304,14 +315,22 @@ function StatusPill({ status }) {
       : normalized.includes("queued") || normalized.includes("next")
         ? "bg-slate-50 text-slate-700 border-slate-200"
         : normalized.includes("reviewed")
-          ? "bg-stone-100 text-stone-500 border-stone-200"
+          ? "bg-emerald-50 text-emerald-800 border-emerald-100"
           : "bg-emerald-50 text-emerald-800 border-emerald-100";
 
-  return <span className={cx("rounded-full border px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.08em]", styles)}>{status}</span>;
+  return (
+    <span className={cx("rounded-full border px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.08em]", styles)}>
+      {status}
+    </span>
+  );
 }
 
 function SectionCard({ children, className }) {
-  return <section className={cx("rounded-2xl border border-stone-200 bg-white shadow-[0_12px_35px_rgba(35,25,15,0.045)]", className)}>{children}</section>;
+  return (
+    <section className={cx("rounded-2xl border border-stone-200 bg-white shadow-[0_12px_35px_rgba(35,25,15,0.045)]", className)}>
+      {children}
+    </section>
+  );
 }
 
 function SectionHeader({ icon: Icon, title, action }) {
@@ -331,7 +350,10 @@ function GoldButton({ children, className, onClick }) {
     <button
       type="button"
       onClick={onClick}
-      className={cx("group inline-flex items-center justify-center gap-2 rounded-xl border border-[#d2b676] bg-white px-4 py-3 text-center font-serif text-[11px] font-semibold uppercase leading-tight tracking-[0.08em] text-[#9a6f21] transition hover:bg-[#fbf7ef]", className)}
+      className={cx(
+        "group inline-flex items-center justify-center gap-2 rounded-xl border border-[#d2b676] bg-white px-4 py-3 text-center font-serif text-[11px] font-semibold uppercase leading-tight tracking-[0.08em] text-[#9a6f21] transition hover:bg-[#fbf7ef]",
+        className
+      )}
     >
       {children}
       <ChevronRight className="h-4 w-4 transition group-hover:translate-x-0.5" />
@@ -412,21 +434,28 @@ function Hero() {
   );
 }
 
-function ModuleNavigation({ activeModule, setActiveModule }) {
+function ModuleNavigation({ activeModule, setActiveModule, reviewedModules }) {
   return (
     <nav className="sticky top-0 z-20 border-b border-stone-200 bg-white/95 backdrop-blur">
       <div className="mx-auto max-w-[1500px] overflow-x-auto px-3 sm:px-6 lg:px-9">
         <div className="flex min-w-max items-stretch gap-1 py-0">
           {moduleNav.map(({ id, label, icon: Icon }) => {
             const active = activeModule === id;
+            const reviewed = reviewedModules[id] && id !== "start";
             return (
               <button
                 key={id}
                 type="button"
                 onClick={() => setActiveModule(id)}
-                className={cx("relative flex min-w-[92px] flex-col items-center justify-center gap-1 px-3 py-3 text-center text-[11px] font-semibold text-stone-600 transition hover:text-[#9a6f21] sm:min-w-[125px] sm:flex-row sm:gap-2 sm:text-sm", active && "text-[#9a6f21]")}
+                className={cx(
+                  "relative flex min-w-[92px] flex-col items-center justify-center gap-1 px-3 py-3 text-center text-[11px] font-semibold text-stone-600 transition hover:text-[#9a6f21] sm:min-w-[125px] sm:flex-row sm:gap-2 sm:text-sm",
+                  active && "text-[#9a6f21]"
+                )}
               >
-                <Icon className="h-4 w-4" />
+                <span className="relative">
+                  <Icon className="h-4 w-4" />
+                  {reviewed && <CheckCircle2 className="absolute -right-2 -top-2 h-3.5 w-3.5 rounded-full bg-white text-emerald-700" />}
+                </span>
                 <span className="leading-tight">{label}</span>
                 {active && <span className="absolute bottom-0 left-2 right-2 h-0.5 bg-[#c79632]" />}
               </button>
@@ -438,7 +467,7 @@ function ModuleNavigation({ activeModule, setActiveModule }) {
   );
 }
 
-function StartHere({ setActiveModule }) {
+function StartHere({ setActiveModule, reviewedModules }) {
   return (
     <div className="space-y-4">
       <SectionCard className="overflow-hidden">
@@ -485,7 +514,10 @@ function StartHere({ setActiveModule }) {
         <div className="grid gap-3 lg:grid-cols-5">
           {investigationSteps.map((step) => (
             <button key={step.number} type="button" onClick={() => setActiveModule(step.target)} className="rounded-2xl border border-stone-200 bg-white p-4 text-left transition hover:border-[#d2b676] hover:bg-[#fbf7ef]">
-              <div className="font-serif text-2xl font-semibold text-[#b58a3b]">{step.number}</div>
+              <div className="flex items-center justify-between gap-2">
+                <div className="font-serif text-2xl font-semibold text-[#b58a3b]">{step.number}</div>
+                {reviewedModules[step.target] && <StatusPill status="Reviewed" />}
+              </div>
               <h3 className="mt-2 font-serif text-base font-semibold text-stone-950">{step.title}</h3>
               <p className="mt-2 text-xs leading-relaxed text-stone-600">{step.summary}</p>
               <div className="mt-3 inline-flex items-center gap-1 text-[10px] font-semibold uppercase tracking-[0.12em] text-[#9a6f21]">
@@ -528,7 +560,10 @@ function SuiteThreeSummary({ setActiveModule }) {
             {suiteStatus.map((item) => (
               <div key={item} className="flex items-center justify-between gap-2 text-xs">
                 <span className="text-stone-600">{item}</span>
-                <span className="inline-flex items-center gap-1.5 text-[11px] font-medium text-emerald-800"><span className="h-1.5 w-1.5 rounded-full bg-emerald-700" />Online</span>
+                <span className="inline-flex items-center gap-1.5 text-[11px] font-medium text-emerald-800">
+                  <span className="h-1.5 w-1.5 rounded-full bg-emerald-700" />
+                  Online
+                </span>
               </div>
             ))}
           </div>
@@ -620,18 +655,31 @@ function EvidenceRecordCard({ record }) {
   return (
     <SectionCard className="p-5">
       <div className="flex min-w-0 gap-3">
-        <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-[#d2b676] bg-[#fbf7ef] text-[#a67a27]"><Icon className="h-5 w-5" /></div>
+        <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-[#d2b676] bg-[#fbf7ef] text-[#a67a27]">
+          <Icon className="h-5 w-5" />
+        </div>
         <div className="min-w-0">
-          <div className="flex flex-wrap items-center gap-2"><span className="text-[10px] font-semibold uppercase tracking-[0.16em] text-stone-500">{record.id}</span><StatusPill status={record.status} /></div>
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="text-[10px] font-semibold uppercase tracking-[0.16em] text-stone-500">{record.id}</span>
+            <StatusPill status={record.status} />
+          </div>
           <h3 className="mt-2 font-serif text-lg font-semibold leading-tight text-stone-950">{record.title}</h3>
           <p className="mt-1 text-xs font-medium uppercase tracking-[0.12em] text-[#9a6f21]">{record.type}</p>
         </div>
       </div>
       <p className="mt-4 text-sm leading-relaxed text-stone-600">{record.summary}</p>
       <div className="mt-4 rounded-xl bg-stone-50 p-4">
-        <div className="mb-2 flex items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.16em] text-stone-500"><Clock3 className="h-3.5 w-3.5" />{record.timestamp}</div>
+        <div className="mb-2 flex items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.16em] text-stone-500">
+          <Clock3 className="h-3.5 w-3.5" />
+          {record.timestamp}
+        </div>
         <div className="grid gap-2 sm:grid-cols-2">
-          {record.details.map((detail) => <div key={detail} className="flex items-center gap-2 text-xs text-stone-700"><CheckCircle2 className="h-3.5 w-3.5 shrink-0 text-emerald-700" />{detail}</div>)}
+          {record.details.map((detail) => (
+            <div key={detail} className="flex items-center gap-2 text-xs text-stone-700">
+              <CheckCircle2 className="h-3.5 w-3.5 shrink-0 text-emerald-700" />
+              {detail}
+            </div>
+          ))}
         </div>
       </div>
       <div className="mt-4 flex items-start gap-3 rounded-xl border border-amber-100 bg-amber-50/50 p-4">
@@ -672,14 +720,26 @@ function CCTVClipCard({ clip }) {
           <SafeImage src={clip.image} alt={clip.title} className="h-52 rounded-none lg:h-full" />
           <div className="absolute left-3 top-3 rounded bg-black/70 px-2 py-1 font-mono text-[11px] text-white">05-12-2025 · {clip.time}</div>
           <div className="absolute bottom-3 left-3 rounded bg-black/70 px-2 py-1 font-mono text-[11px] text-white">{clip.camera}</div>
-          <div className="absolute bottom-3 right-3 flex items-center gap-1 rounded-full bg-white/90 px-2 py-1 text-[10px] font-semibold uppercase tracking-[0.08em] text-stone-800"><PlayCircle className="h-3.5 w-3.5 text-[#9a6f21]" />Video Ready</div>
+          <div className="absolute bottom-3 right-3 flex items-center gap-1 rounded-full bg-white/90 px-2 py-1 text-[10px] font-semibold uppercase tracking-[0.08em] text-stone-800">
+            <PlayCircle className="h-3.5 w-3.5 text-[#9a6f21]" />
+            Video Ready
+          </div>
         </div>
         <div className="p-5">
-          <div className="flex flex-wrap items-center gap-2"><span className="text-[10px] font-semibold uppercase tracking-[0.16em] text-stone-500">{clip.id}</span><StatusPill status={clip.status} /></div>
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="text-[10px] font-semibold uppercase tracking-[0.16em] text-stone-500">{clip.id}</span>
+            <StatusPill status={clip.status} />
+          </div>
           <h3 className="mt-2 font-serif text-xl font-semibold leading-tight text-stone-950">{clip.title}</h3>
-          <div className="mt-2 flex flex-wrap items-center gap-3 text-xs text-stone-500"><span className="inline-flex items-center gap-1.5"><MapPin className="h-3.5 w-3.5" />{clip.label}</span><span className="inline-flex items-center gap-1.5"><Video className="h-3.5 w-3.5" />{clip.camera}</span></div>
+          <div className="mt-2 flex flex-wrap items-center gap-3 text-xs text-stone-500">
+            <span className="inline-flex items-center gap-1.5"><MapPin className="h-3.5 w-3.5" />{clip.label}</span>
+            <span className="inline-flex items-center gap-1.5"><Video className="h-3.5 w-3.5" />{clip.camera}</span>
+          </div>
           <p className="mt-4 text-sm leading-relaxed text-stone-600">{clip.summary}</p>
-          <div className="mt-4 flex items-start gap-3 rounded-xl border border-amber-100 bg-amber-50/50 p-4"><Eye className="mt-0.5 h-4 w-4 shrink-0 text-[#b58a3b]" /><p className="text-xs leading-relaxed text-stone-600"><span className="font-semibold text-stone-800">DCCU review note: </span>{clip.dccuNote}</p></div>
+          <div className="mt-4 flex items-start gap-3 rounded-xl border border-amber-100 bg-amber-50/50 p-4">
+            <Eye className="mt-0.5 h-4 w-4 shrink-0 text-[#b58a3b]" />
+            <p className="text-xs leading-relaxed text-stone-600"><span className="font-semibold text-stone-800">DCCU review note: </span>{clip.dccuNote}</p>
+          </div>
         </div>
       </div>
     </SectionCard>
@@ -697,12 +757,22 @@ function MoreRecords() {
           return (
             <SectionCard key={record.id} className="p-5">
               <div className="flex items-start gap-3">
-                <div className={cx("flex h-11 w-11 shrink-0 items-center justify-center rounded-xl", locked ? "bg-stone-100 text-stone-500" : "border border-[#d2b676] bg-[#fbf7ef] text-[#a67a27]")}><Icon className="h-5 w-5" /></div>
+                <div className={cx("flex h-11 w-11 shrink-0 items-center justify-center rounded-xl", locked ? "bg-stone-100 text-stone-500" : "border border-[#d2b676] bg-[#fbf7ef] text-[#a67a27]")}>
+                  <Icon className="h-5 w-5" />
+                </div>
                 <div className="min-w-0 flex-1">
-                  <div className="flex flex-wrap items-center gap-2"><h3 className="font-serif text-lg font-semibold text-stone-950">{record.title}</h3><StatusPill status={record.status} /></div>
+                  <div className="flex flex-wrap items-center gap-2">
+                    <h3 className="font-serif text-lg font-semibold text-stone-950">{record.title}</h3>
+                    <StatusPill status={record.status} />
+                  </div>
                   <p className="mt-2 text-sm leading-relaxed text-stone-600">{record.summary}</p>
                   <div className="mt-4 grid gap-2">
-                    {record.items.map((item) => <div key={item} className="flex items-center gap-2 rounded-xl bg-stone-50 p-3 text-sm text-stone-700">{locked ? <Lock className="h-4 w-4 text-stone-400" /> : <FileSearch className="h-4 w-4 text-[#b58a3b]" />}{item}</div>)}
+                    {record.items.map((item) => (
+                      <div key={item} className="flex items-center gap-2 rounded-xl bg-stone-50 p-3 text-sm text-stone-700">
+                        {locked ? <Lock className="h-4 w-4 text-stone-400" /> : <FileSearch className="h-4 w-4 text-[#b58a3b]" />}
+                        {item}
+                      </div>
+                    ))}
                   </div>
                 </div>
               </div>
@@ -712,7 +782,7 @@ function MoreRecords() {
       </div>
       <SectionCard className="border-amber-100 bg-amber-50/50 p-5">
         <div className="flex items-start gap-3">
-          <AlertTriangle className="mt-0.5 h-5 w-5 shrink-0 text-[#b58a3b]" />
+          <Info className="mt-0.5 h-5 w-5 shrink-0 text-[#b58a3b]" />
           <div>
             <h3 className="font-serif text-lg font-semibold text-stone-950">Player Guidance</h3>
             <p className="mt-1 text-sm leading-relaxed text-stone-600">Do not start here. Review Bookings, CCTV, Suite Three and Staff Access first. The archive and reconstruction make more sense after those records.</p>
@@ -723,13 +793,60 @@ function MoreRecords() {
   );
 }
 
+function NextStepBar({ activeModule, setActiveModule, reviewedModules }) {
+  const step = nextStepCopy[activeModule];
+  const currentIndex = moduleOrder.indexOf(activeModule);
+  const reviewedCount = moduleOrder.filter((id) => id !== "start" && reviewedModules[id]).length;
+
+  if (!step) return null;
+
+  return (
+    <SectionCard className="mt-5 border-[#d2b676] bg-white p-5">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <div>
+          <div className="text-[10px] font-semibold uppercase tracking-[0.22em] text-stone-500">Guided Review</div>
+          <h3 className="mt-1 font-serif text-xl font-semibold text-stone-950">
+            {activeModule === "more" ? "Advanced records reviewed" : "Ready for the next section?"}
+          </h3>
+          <p className="mt-1 text-sm leading-relaxed text-stone-600">
+            {activeModule === "more"
+              ? "Return to Start Here to re-check the full investigation order before making your final accusation."
+              : `Recommended next step: ${step.label}. Reviewed sections: ${reviewedCount}/5.`}
+          </p>
+        </div>
+        <div className="flex flex-col gap-2 sm:items-end">
+          <GoldButton onClick={() => setActiveModule(step.target)} className="w-full sm:w-auto">
+            {step.label}
+          </GoldButton>
+          {currentIndex > 1 && (
+            <button
+              type="button"
+              onClick={() => setActiveModule(moduleOrder[currentIndex - 1])}
+              className="rounded-xl px-3 py-2 font-serif text-[10px] font-semibold uppercase tracking-[0.08em] text-stone-500 hover:text-[#9a6f21]"
+            >
+              Back one step
+            </button>
+          )}
+        </div>
+      </div>
+    </SectionCard>
+  );
+}
+
 function Footer() {
   return (
     <footer className="border-t border-stone-200 bg-white px-4 py-5 text-center sm:px-6 lg:px-9">
       <div className="mx-auto flex max-w-[1500px] flex-col items-center gap-2 text-stone-500">
-        <img src={AURELIA_LOGO} alt="" className="h-8 w-8 object-contain opacity-70" onError={(event) => { event.currentTarget.style.display = "none"; }} />
+        <img
+          src={AURELIA_LOGO}
+          alt=""
+          className="h-8 w-8 object-contain opacity-70"
+          onError={(event) => {
+            event.currentTarget.style.display = "none";
+          }}
+        />
         <div className="font-serif text-sm uppercase tracking-[0.35em] text-stone-700">Aurelia House Internal System</div>
-        <div className="text-[10px] font-semibold uppercase tracking-[0.24em]">Mirrored by DCCU · Read-Only Access · Version 1.0.4</div>
+        <div className="text-[10px] font-semibold uppercase tracking-[0.24em]">Mirrored by DCCU · Read-Only Access · Version 1.0.5</div>
       </div>
     </footer>
   );
@@ -737,7 +854,33 @@ function Footer() {
 
 export default function AureliaHouseInternalSystem() {
   const [activeModule, setActiveModule] = useState("start");
+  const [reviewedModules, setReviewedModules] = useState(() => {
+    if (typeof window === "undefined") return {};
+    try {
+      const savedState = JSON.parse(window.localStorage.getItem(STORAGE_KEY) || "{}");
+      return savedState.reviewedModules || {};
+    } catch {
+      return {};
+    }
+  });
+
   const activeLabel = moduleNav.find((item) => item.id === activeModule)?.label || "Start Here";
+
+  useEffect(() => {
+    if (activeModule === "start") return;
+    setReviewedModules((current) => {
+      if (current[activeModule]) return current;
+      const next = { ...current, [activeModule]: true };
+      window.localStorage.setItem(STORAGE_KEY, JSON.stringify({ reviewedModules: next }));
+      return next;
+    });
+  }, [activeModule]);
+
+  function resetReviewedState() {
+    window.localStorage.removeItem(STORAGE_KEY);
+    setReviewedModules({});
+    setActiveModule("start");
+  }
 
   return (
     <main className="min-h-screen bg-[#f7f5f0] text-stone-900">
@@ -745,7 +888,7 @@ export default function AureliaHouseInternalSystem() {
       <div className="mx-auto max-w-[1600px] bg-white shadow-[0_25px_80px_rgba(35,25,15,0.12)] md:my-3 md:overflow-hidden md:rounded-xl md:border md:border-stone-200">
         <Header />
         <Hero />
-        <ModuleNavigation activeModule={activeModule} setActiveModule={setActiveModule} />
+        <ModuleNavigation activeModule={activeModule} setActiveModule={setActiveModule} reviewedModules={reviewedModules} />
 
         <div className="bg-[#fbfaf7] px-4 py-4 sm:px-6 lg:px-9 lg:py-5">
           {activeModule !== "start" && (
@@ -754,16 +897,26 @@ export default function AureliaHouseInternalSystem() {
                 <div className="text-[10px] font-semibold uppercase tracking-[0.22em] text-stone-500">Current Section</div>
                 <div className="font-serif text-lg font-semibold text-stone-950">{activeLabel}</div>
               </div>
-              <button type="button" onClick={() => setActiveModule("start")} className="rounded-xl border border-[#d2b676] bg-white px-3 py-2 font-serif text-[10px] font-semibold uppercase tracking-[0.08em] text-[#9a6f21]">Start Here</button>
+              <button type="button" onClick={() => setActiveModule("start")} className="rounded-xl border border-[#d2b676] bg-white px-3 py-2 font-serif text-[10px] font-semibold uppercase tracking-[0.08em] text-[#9a6f21]">
+                Start Here
+              </button>
             </div>
           )}
 
-          {activeModule === "start" && <StartHere setActiveModule={setActiveModule} />}
+          {activeModule === "start" && <StartHere setActiveModule={setActiveModule} reviewedModules={reviewedModules} />}
           {activeModule === "bookings" && <RecordModule icon={CalendarDays} eyebrow="Guest & Booking Records" title="Bookings" status="Available" summary="Start here. These records explain Amelia Hart’s appointment and why she looks important early on." records={bookingRecords} />}
           {activeModule === "cctv" && <CCTVModule />}
           {activeModule === "suite-three" && <RecordModule icon={DoorOpen} eyebrow="Suite Three System" title="Suite Three" status="Available" summary="Review room status and system behaviour after checking booking and CCTV records." records={suiteThreeRecords} />}
           {activeModule === "staff-access" && <RecordModule icon={Users} eyebrow="Credential & Access Logs" title="Staff Access" status="Available" summary="Use this section to check who could access staff-only corridors, panels and system controls." records={staffAccessRecords} />}
           {activeModule === "more" && <MoreRecords />}
+
+          <NextStepBar activeModule={activeModule} setActiveModule={setActiveModule} reviewedModules={reviewedModules} />
+
+          <div className="mt-4 text-center">
+            <button type="button" onClick={resetReviewedState} className="font-serif text-[10px] font-semibold uppercase tracking-[0.12em] text-stone-400 hover:text-stone-700">
+              Reset reviewed sections
+            </button>
+          </div>
         </div>
 
         <Footer />
