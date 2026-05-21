@@ -12,6 +12,7 @@ import PortalLogin from "./portal/pages/PortalLogin";
 import Case001Portal from "./portal/pages/Case001Portal";
 import ProtectedPortal from "./portal/components/ProtectedPortal";
 import AureliaHouseInternalSystem from "./pages/AureliaHouseInternalSystem";
+import AureliaHouseBriefing from "./pages/AureliaHouseBriefing";
 
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -38,6 +39,7 @@ export default function App() {
 
         <Route path="/portal" element={<PortalLogin />} />
         <Route path="/aureliahouse" element={<AureliaHouseInternalSystem />} />
+        <Route path="/aureliahousebriefing" element={<AureliaHouseBriefing />} />
         <Route
           path="/portal/case-001"
           element={
