@@ -184,48 +184,87 @@ function ArchiveDocumentCard({ file, index, total, onOpen }) {
 
   return (
     <SectionCard className="overflow-hidden">
-      <button type="button" onClick={onOpen} className="block w-full text-left">
-        <div className="border-b border-stone-200 bg-[#fbf7ef] px-5 py-4">
-          <div className="flex items-start justify-between gap-3">
-            <div>
-              <div className="text-[10px] font-semibold uppercase tracking-[0.18em] text-stone-500">
-                Recovered Document {index + 1} of {total}
-              </div>
-              <h3 className="mt-1 font-serif text-xl font-semibold text-stone-950">
-                {file.title}
-              </h3>
-              <p className="mt-1 text-xs text-stone-500">{file.date}</p>
+      <div className="border-b border-stone-200 bg-[#fbf7ef] px-5 py-4">
+        <div className="flex items-start justify-between gap-3">
+          <div>
+            <div className="text-[10px] font-semibold uppercase tracking-[0.18em] text-stone-500">
+              Recovered Document {index + 1} of {total}
             </div>
+            <h3 className="mt-1 font-serif text-xl font-semibold text-stone-950">
+              {file.title}
+            </h3>
+            <p className="mt-1 text-xs text-stone-500">
+              {file.id} · {file.date}
+            </p>
+          </div>
 
-            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-[#d2b676] bg-white text-[#a67a27]">
-              <Icon className="h-5 w-5" />
-            </div>
+          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-[#d2b676] bg-white text-[#a67a27]">
+            <Icon className="h-5 w-5" />
           </div>
         </div>
+      </div>
 
-        <div className="bg-stone-100 p-3">
-          <div className="aspect-[3/4] overflow-hidden rounded-xl border border-stone-200 bg-white">
+      <div className="p-5">
+        <div className="mb-4">
+          <StatusPill>{file.status}</StatusPill>
+        </div>
+
+        <div className="rounded-2xl border border-[#d2b676] bg-[#fffaf1] p-4">
+          <div className="text-[10px] font-semibold uppercase tracking-[0.18em] text-stone-500">
+            Archive Extract
+          </div>
+
+          <div className="mt-3 space-y-2">
+            {file.extract.map((item) => (
+              <div key={item} className="flex items-start gap-2 text-sm leading-relaxed text-stone-700">
+                <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-[#b58a3b]" />
+                <span>{item}</span>
+              </div>
+            ))}
+          </div>
+
+          {file.linked?.length > 0 && (
+            <div className="mt-4 border-t border-[#e2cf9e] pt-3">
+              <div className="text-[10px] font-semibold uppercase tracking-[0.18em] text-stone-500">
+                Linked Records
+              </div>
+              <div className="mt-2 flex flex-wrap gap-2">
+                {file.linked.map((item) => (
+                  <span
+                    key={item}
+                    className="rounded-full border border-[#d2b676] bg-white px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.08em] text-[#9a6f21]"
+                  >
+                    {item}
+                  </span>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+
+        <button
+          type="button"
+          onClick={onOpen}
+          className="mt-5 block w-full overflow-hidden rounded-2xl border border-stone-200 bg-stone-100 text-left transition hover:border-[#d2b676]"
+        >
+          <div className="aspect-[3/4] overflow-hidden bg-white">
             <img
               src={file.image}
               alt={file.title}
               className="h-full w-full object-cover object-top"
             />
           </div>
-        </div>
 
-        <div className="p-5">
-          <div className="mb-3">
-            <StatusPill>{file.status}</StatusPill>
+          <div className="border-t border-stone-200 bg-white p-4">
+            <div className="text-sm font-semibold text-stone-900">
+              Original Document
+            </div>
+            <div className="mt-1 text-[10px] font-semibold uppercase tracking-[0.18em] text-[#9a6f21]">
+              Open full document
+            </div>
           </div>
-
-          <div className="text-sm font-semibold text-stone-900">{file.label}</div>
-          <p className="mt-2 text-sm leading-relaxed text-stone-600">{file.summary}</p>
-
-          <div className="mt-4 text-[10px] font-semibold uppercase tracking-[0.18em] text-[#9a6f21]">
-            Open Document
-          </div>
-        </div>
-      </button>
+        </button>
+      </div>
     </SectionCard>
   );
 }

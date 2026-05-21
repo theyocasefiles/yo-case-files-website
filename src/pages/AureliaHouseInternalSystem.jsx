@@ -7,6 +7,7 @@ import { Home } from "../features/aurelia/modules/Home";
 import { Evidence } from "../features/aurelia/modules/Evidence";
 import { LockedFiles } from "../features/aurelia/modules/LockedFiles";
 import { STORAGE_KEY } from "../features/aurelia/data/aureliaData";
+import { FinalAccusation } from "../features/aurelia/modules/FinalAccusation";
 
 export default function AureliaHouseInternalSystem() {
   const [active, setActive] = useState("home");
@@ -41,6 +42,7 @@ export default function AureliaHouseInternalSystem() {
           {active === "home" && <Home setActive={setActive} />}
           {active === "evidence" && <Evidence />}
           {active === "locked" && <LockedFiles />}
+          {active === "accuse" && <FinalAccusation />}
         </div>
 
         <Footer />
